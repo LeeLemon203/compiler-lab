@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>编译原理实验平台 - LR(0)项目集可视化</title>
+    <title>编译原理实验平台 - 实验一/二/三</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://unpkg.com/vis-network@9.1.2/dist/vis-network.min.js"></script>
     <link rel="stylesheet" href="style.css">
@@ -15,6 +15,7 @@
             <div class="p-6 border-b">
                 <h1 class="text-xl font-bold text-blue-600">编译原理实验平台</h1>
                 <p class="text-sm text-gray-500 mt-1">Compiler Lab</p>
+                <p class="text-xs text-gray-400 mt-1">C/C++ 实现</p>
             </div>
             <nav class="p-4">
                 <div class="space-y-2">
@@ -25,10 +26,13 @@
                         <div class="text-xs text-gray-400 uppercase tracking-wider">实验项目</div>
                     </div>
                     <div class="nav-item" data-page="exp1">
-                        <span class="text-gray-700">📐 实验一：DFA模拟与可视化</span>
+                        <span class="text-gray-700">📐 实验一：DFA模拟器</span>
+                    </div>
+                    <div class="nav-item" data-page="exp2">
+                        <span class="text-gray-700">🔡 实验二：词法分析器</span>
                     </div>
                     <div class="nav-item" data-page="exp3">
-                        <span class="text-gray-700">🔍 实验三：LR(0)项目集规范族</span>
+                        <span class="text-gray-700">🔍 实验三：LR(0)项目集</span>
                     </div>
                     <div class="nav-item" data-page="about">
                         <span class="text-gray-700">📖 关于</span>
@@ -43,66 +47,203 @@
             <div id="page-home" class="page-content active">
                 <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg text-white p-8 mb-6">
                     <h1 class="text-3xl font-bold">编译原理实验平台</h1>
-                    <p class="mt-2 opacity-90">实验三：LR(0) 项目集规范族构建与可视化</p>
+                    <p class="mt-2 opacity-90">实验一：DFA模拟器 | 实验二：词法分析器 | 实验三：LR(0)项目集规范族</p>
+                    <p class="mt-1 text-sm opacity-75">基于 C/C++ 实现，前端展示核心功能</p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="bg-white rounded-lg shadow p-6">
                         <h2 class="text-xl font-semibold mb-4">📐 实验一</h2>
-                        <p class="text-gray-600">DFA模拟与可视化：输入五元组定义，模拟DFA运行，验证字符串，生成状态转移图。</p>
+                        <p class="text-gray-600">DFA模拟器：加载dfa_in_1.txt，支持合法性检查、枚举接受字符串、判断字符串是否被接受。</p>
+                        <p class="text-sm text-gray-400 mt-2">核心文件：dfa.cpp, dfa_in_1.txt</p>
                         <button class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 go-to-exp1">进入实验一</button>
                     </div>
                     <div class="bg-white rounded-lg shadow p-6">
+                        <h2 class="text-xl font-semibold mb-4">🔡 实验二</h2>
+                        <p class="text-gray-600">词法分析器：加载dfa.txt，识别ID、INT、FLOAT、运算符，输出Token流。</p>
+                        <p class="text-sm text-gray-400 mt-2">核心文件：scanner.c, dfa.txt, test.src</p>
+                        <button class="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 go-to-exp2">进入实验二</button>
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6">
                         <h2 class="text-xl font-semibold mb-4">🔍 实验三</h2>
-                        <p class="text-gray-600">LR(0)项目集规范族：输入文法规则，自动生成项目集、转移关系图，检测冲突。</p>
+                        <p class="text-gray-600">LR(0)项目集规范族：加载grammer.txt，生成项目集、GOTO图、检测冲突。</p>
+                        <p class="text-sm text-gray-400 mt-2">核心文件：lr0.c, grammer.txt</p>
                         <button class="mt-4 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 go-to-exp3">进入实验三</button>
                     </div>
                 </div>
             </div>
 
-            <!-- 实验一页面 -->
+            <!-- ==================== 实验一：DFA模拟器 ==================== -->
             <div id="page-exp1" class="page-content">
                 <div class="bg-white rounded-lg shadow p-6">
-                    <h1 class="text-2xl font-bold mb-4">实验一：DFA模拟与可视化</h1>
-                    <p class="text-gray-600 mb-4">DFA模拟器功能请参考 lab1 目录下的实现。</p>
-                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
-                        <p class="text-yellow-700">提示：实验一详细内容请查看 dfa.js 模块</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 实验三：LR(0)项目集规范族 -->
-            <div id="page-exp3" class="page-content">
-                <div class="bg-white rounded-lg shadow p-6">
-                    <h1 class="text-2xl font-bold mb-4">实验三：LR(0) 项目集规范族</h1>
-                    <p class="text-gray-600 mb-6">输入文法规则，自动生成LR(0)项目集规范族，并可视化状态转移图。</p>
+                    <h1 class="text-2xl font-bold mb-4">实验一：DFA 模拟器</h1>
+                    <p class="text-gray-600 mb-6">对应代码：<code class="bg-gray-100 px-2 py-1 rounded">dfa.cpp</code> + <code class="bg-gray-100 px-2 py-1 rounded">dfa_in_1.txt</code></p>
                     
-                    <!-- 文法输入区 -->
+                    <!-- DFA定义显示区 -->
                     <div class="mb-6">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">文法规则（支持扩展巴科斯范式）</label>
-                        <textarea id="grammar-input" rows="6" class="w-full border border-gray-300 rounded-lg p-3 font-mono text-sm">E -> E + T | T
-T -> T * F | F
-F -> ( E ) | id</textarea>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">DFA配置文件 (dfa_in_1.txt 格式)</label>
+                        <textarea id="dfa-config" rows="12" class="w-full border border-gray-300 rounded-lg p-3 font-mono text-sm">a b
+===
+1 2 3 4
+===
+1
+===
+4
+===
+1 a 2
+1 b 3
+2 a 4
+2 b 3
+3 a 2
+3 b 4
+4 a 4
+4 b 4</textarea>
                         <div class="flex gap-3 mt-3">
-                            <button id="parse-grammar" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">解析并生成项目集</button>
+                            <button id="dfa-load" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">加载并检查DFA</button>
                             <label class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 cursor-pointer">
                                 上传文件
-                                <input type="file" id="file-upload" accept=".txt" class="hidden">
+                                <input type="file" id="dfa-upload" accept=".txt" class="hidden">
                             </label>
                         </div>
                     </div>
 
-                    <!-- 结果显示区 -->
-                    <div id="result-area" class="hidden">
+                    <!-- DFA信息和合法性检查结果 -->
+                    <div id="dfa-info" class="hidden mb-4 p-3 bg-gray-50 rounded-lg">
+                        <h2 class="font-semibold mb-2">📋 DFA信息</h2>
+                        <div id="dfa-info-content" class="font-mono text-sm"></div>
+                    </div>
+
+                    <div id="dfa-validation" class="hidden mb-4 p-3 rounded-lg">
+                        <div id="dfa-validation-content"></div>
+                    </div>
+
+                    <!-- 功能测试区 -->
+                    <div id="dfa-test-area" class="hidden">
+                        <div class="border-t pt-4 mb-4">
+                            <h2 class="text-lg font-semibold mb-3">🔧 功能测试</h2>
+                            
+                            <!-- 功能1：枚举长度≤N的字符串 -->
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">功能1：枚举长度 ≤ N 的所有接受字符串</label>
+                                <div class="flex gap-3">
+                                    <input type="number" id="dfa-n" placeholder="N" class="border border-gray-300 rounded-lg p-2 w-32">
+                                    <button id="dfa-enumerate" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">枚举</button>
+                                </div>
+                                <div id="dfa-strings-result" class="mt-2 p-3 bg-gray-50 rounded-lg font-mono text-sm"></div>
+                            </div>
+                            
+                            <!-- 功能2：判断字符串是否被接受 -->
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">功能2：判断输入字符串是否被接受</label>
+                                <div class="flex gap-3">
+                                    <input type="text" id="dfa-test-string" placeholder="输入字符串 (如: aab)" class="border border-gray-300 rounded-lg p-2 flex-1">
+                                    <button id="dfa-test" class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600">测试</button>
+                                </div>
+                                <div id="dfa-test-result" class="mt-2 p-3 rounded-lg font-mono text-sm"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- 状态转移图 -->
+                        <div class="mb-4">
+                            <h2 class="text-lg font-semibold mb-3">🎨 状态转移图</h2>
+                            <div id="dfa-graph-container" class="border border-gray-200 rounded-lg bg-white" style="height: 400px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== 实验二：词法分析器 ==================== -->
+            <div id="page-exp2" class="page-content">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h1 class="text-2xl font-bold mb-4">实验二：词法分析器 (Scanner)</h1>
+                    <p class="text-gray-600 mb-6">对应代码：<code class="bg-gray-100 px-2 py-1 rounded">scanner.c</code> + <code class="bg-gray-100 px-2 py-1 rounded">dfa.txt</code></p>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">DFA规则文件 (dfa.txt)</label>
+                        <textarea id="scanner-dfa" rows="8" class="w-full border border-gray-300 rounded-lg p-3 font-mono text-sm">a b c d e f g h i j k l m n o p q r s t u v w x y z A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 0 1 2 3 4 5 6 7 8 9 + - = ; .
+===
+0 1 2 3 4 5 6 7 8 9 10 11 12
+===
+0
+===
+1 2 3 4 5 6 7 8 11 12
+===
+0 a 1
+0 b 1
+0 + 2
+0 - 3
+0 = 4
+0 ; 5
+0 . 6
+0 0 7</textarea>
+                        <button id="scanner-load-dfa" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">加载DFA规则</button>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">源代码输入 (test.src)</label>
+                        <textarea id="scanner-input" rows="8" class="w-full border border-gray-300 rounded-lg p-3 font-mono text-sm">int a = 10;
+float b = 3.14;
+float c = .5;
+float d = 1e-3;
+float e = -3.14;
+int f = -100;
+a = a + 5;
+b = b - 2;</textarea>
+                        <div class="flex gap-3 mt-3">
+                            <button id="scanner-parse" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">词法分析</button>
+                            <label class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 cursor-pointer">
+                                上传源代码文件
+                                <input type="file" id="scanner-upload" accept=".txt,.c,.src" class="hidden">
+                            </label>
+                            <button id="scanner-clear" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">清空</button>
+                        </div>
+                    </div>
+                    
+                    <div id="scanner-result-area" class="hidden">
+                        <h2 class="text-lg font-semibold mb-3">📋 Token流输出</h2>
+                        <div id="scanner-output" class="bg-gray-900 text-green-400 rounded-lg p-4 font-mono text-sm overflow-x-auto" style="max-height: 400px; overflow-y: auto;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== 实验三：LR(0)项目集规范族 ==================== -->
+            <div id="page-exp3" class="page-content">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h1 class="text-2xl font-bold mb-4">实验三：LR(0) 项目集规范族</h1>
+                    <p class="text-gray-600 mb-6">对应代码：<code class="bg-gray-100 px-2 py-1 rounded">lr0.c</code> + <code class="bg-gray-100 px-2 py-1 rounded">grammer.txt</code></p>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">文法规则 (grammer.txt)</label>
+                        <textarea id="grammar-input" rows="8" class="w-full border border-gray-300 rounded-lg p-3 font-mono text-sm"># 算术表达式文法
+E -> E + T
+E -> T
+T -> T * F
+T -> F
+F -> ( E )
+F -> id</textarea>
+                        <div class="flex gap-3 mt-3">
+                            <button id="parse-grammar" class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600">解析并生成项目集</button>
+                            <label class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 cursor-pointer">
+                                上传文法文件
+                                <input type="file" id="grammar-upload" accept=".txt" class="hidden">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="lr0-result-area" class="hidden">
                         <div class="mb-6">
-                            <h2 class="text-lg font-semibold mb-3">📋 LR(0) 项目集规范族</h2>
-                            <div id="item-sets-list" class="bg-gray-50 rounded-lg p-4 font-mono text-sm overflow-x-auto"></div>
+                            <h2 class="text-lg font-semibold mb-3">📋 产生式列表</h2>
+                            <div id="productions-list" class="bg-gray-50 rounded-lg p-4 font-mono text-sm"></div>
+                        </div>
+                        <div class="mb-6">
+                            <h2 class="text-lg font-semibold mb-3">🔍 LR(0) 项目集规范族</h2>
+                            <div id="item-sets-list" class="bg-gray-50 rounded-lg p-4 font-mono text-sm overflow-x-auto" style="max-height: 400px; overflow-y: auto;"></div>
                         </div>
                         <div class="mb-6">
                             <h2 class="text-lg font-semibold mb-3">⚠️ 冲突检查</h2>
                             <div id="conflict-result" class="rounded-lg p-4"></div>
                         </div>
                         <div class="mb-6">
-                            <h2 class="text-lg font-semibold mb-3">🎨 状态转移图</h2>
+                            <h2 class="text-lg font-semibold mb-3">🎨 GOTO 图</h2>
                             <div id="graph-container" class="border border-gray-200 rounded-lg bg-white" style="height: 500px;"></div>
                         </div>
                     </div>
@@ -113,24 +254,67 @@ F -> ( E ) | id</textarea>
             <div id="page-about" class="page-content">
                 <div class="bg-white rounded-lg shadow p-6">
                     <h1 class="text-2xl font-bold mb-4">关于本项目</h1>
-                    <p class="text-gray-600 mb-4">编译原理实验平台 - 实验三：LR(0)项目集规范族构建与可视化</p>
+                    <p class="text-gray-600 mb-4">编译原理实验平台 - 基于C/C++实现，前端可视化展示</p>
+                    
                     <div class="border-t pt-4 mt-4">
-                        <h2 class="font-semibold mb-2">功能特性</h2>
-                        <ul class="list-disc list-inside text-gray-600 space-y-1">
-                            <li>支持扩展巴科斯范式（EBNF）文法输入</li>
-                            <li>自动增广文法（添加 S' → S）</li>
-                            <li>生成 LR(0) 项目集规范族</li>
-                            <li>计算闭包（Closure）和状态转移（Goto）</li>
-                            <li>可视化状态转移图</li>
-                            <li>检测移进-归约和归约-归约冲突</li>
-                            <li>支持文本文档上传</li>
+                        <h2 class="font-semibold mb-2">📁 项目文件结构</h2>
+                        <pre class="bg-gray-100 p-3 rounded-lg text-sm">
+compiler-lab/
+├── index.html          # 主页面
+├── style.css           # 样式文件
+├── app.js              # 页面切换
+├── dfa.js              # 实验一：DFA模拟器 (对应 dfa.cpp)
+├── scanner.js          # 实验二：词法分析器 (对应 scanner.c)
+├── lr0.js              # 实验三：LR(0)项目集 (对应 lr0.c)
+├── dfa_in_1.txt        # 实验一 DFA配置
+├── dfa.txt             # 实验二 DFA规则
+├── test.src            # 实验二 测试源码
+└── grammer.txt         # 实验三 文法规则</pre>
+                    </div>
+                    
+                    <div class="border-t pt-4 mt-4">
+                        <h2 class="font-semibold mb-2">📐 实验一 (dfa.cpp)</h2>
+                        <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4">
+                            <li>加载 dfa_in_1.txt 五元组配置</li>
+                            <li>DFA合法性检查：开始状态、接受状态、转换表完整性</li>
+                            <li>枚举长度≤N的所有接受字符串 (BFS)</li>
+                            <li>判断输入字符串是否被接受</li>
                         </ul>
+                    </div>
+                    
+                    <div class="border-t pt-4 mt-4">
+                        <h2 class="font-semibold mb-2">🔡 实验二 (scanner.c)</h2>
+                        <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4">
+                            <li>加载 dfa.txt 词法规则</li>
+                            <li>识别标识符(ID)、整型常量(INT)、浮点常量(FLOAT)</li>
+                            <li>识别运算符: = + - ; .</li>
+                            <li>输出格式: (Token类型, 原始单词)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="border-t pt-4 mt-4">
+                        <h2 class="font-semibold mb-2">🔍 实验三 (lr0.c)</h2>
+                        <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4">
+                            <li>加载 grammer.txt 文法规则</li>
+                            <li>增广文法 (添加 S' → S)</li>
+                            <li>计算闭包(Closure)和Goto转移</li>
+                            <li>生成LR(0)项目集规范族</li>
+                            <li>检测移进-归约和归约-归约冲突</li>
+                            <li>输出GOTO图</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="border-t pt-4 mt-4">
+                        <h2 class="font-semibold mb-2">Git 仓库</h2>
+                        <p class="text-gray-600">https://github.com/LeeLemon203/compiler-lab</p>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
+    <script src="dfa.js"></script>
+    <script src="scanner.js"></script>
     <script src="lr0.js"></script>
     <script src="app.js"></script>
 </body>
