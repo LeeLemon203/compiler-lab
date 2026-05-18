@@ -6,7 +6,125 @@
     <title>编译原理实验平台 - 实验一/二/三</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://unpkg.com/vis-network@9.1.2/dist/vis-network.min.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .page-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .page-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-item {
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item:hover {
+            background-color: #f3f4f6;
+        }
+
+        .nav-item.active {
+            background-color: #eff6ff;
+        }
+
+        .nav-item.active span {
+            color: #2563eb;
+            font-weight: 500;
+        }
+
+        .nav-section {
+            padding: 8px 12px;
+        }
+
+        .item-set {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            background-color: white;
+        }
+
+        .item-set-header {
+            background-color: #f9fafb;
+            padding: 8px 12px;
+            border-bottom: 1px solid #e5e7eb;
+            font-weight: 600;
+        }
+
+        .item-set-content {
+            padding: 12px;
+            font-family: monospace;
+            font-size: 13px;
+        }
+
+        .transition-list {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed #e5e7eb;
+            color: #6b7280;
+            font-size: 12px;
+        }
+
+        .transition-item {
+            display: inline-block;
+            background-color: #e0e7ff;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-right: 8px;
+            margin-bottom: 4px;
+            font-size: 11px;
+        }
+
+        .conflict-warning {
+            background-color: #fef2f2;
+            border-left: 4px solid #ef4444;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .conflict-success {
+            background-color: #f0fdf4;
+            border-left: 4px solid #22c55e;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        #dfa-graph-container, #graph-container {
+            min-height: 400px;
+            background-color: #fafafa;
+        }
+
+        @media (max-width: 768px) {
+            .flex {
+                flex-direction: column;
+            }
+            aside {
+                width: 100%;
+                height: auto;
+            }
+        }
+    </style>
 </head>
 <body class="bg-gray-50">
     <div class="flex h-screen">
@@ -48,39 +166,75 @@
                 <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg text-white p-8 mb-6">
                     <h1 class="text-3xl font-bold">编译原理实验平台</h1>
                     <p class="mt-2 opacity-90">实验一：DFA模拟器 | 实验二：词法分析器 | 实验三：LR(0)项目集规范族</p>
-                    <p class="mt-1 text-sm opacity-75">基于 C/C++ 实现，前端展示核心功能</p>
+                    <p class="mt-1 text-sm opacity-75">基于 C/C++ 实现，前端可视化展示核心功能</p>
                 </div>
+
+                <!-- 项目架构展示 -->
+                <div class="bg-white rounded-lg shadow p-6 mb-6">
+                    <h2 class="text-xl font-semibold mb-4">📁 项目架构</h2>
+                    <pre class="bg-gray-800 text-green-400 p-4 rounded-lg text-sm overflow-x-auto" style="font-family: monospace;">
+compiler-lab/
+│
+├── index.html                          # 主页面
+├── style.css                           # 样式文件
+├── app.js                              # 页面切换逻辑
+│
+├── experiment1/                        # 实验一：DFA模拟器
+│   ├── dfa.cpp                         # DFA核心实现 (C++)
+│   └── dfa_in_1.txt                    # DFA配置文件
+│
+├── experiment2/                        # 实验二：词法分析器
+│   ├── scanner.c                       # 词法分析器实现 (C)
+│   ├── dfa.txt                         # DFA词法规则
+│   └── test.src                        # 测试源代码
+│
+├── experiment3/                        # 实验三：LR(0)项目集
+│   ├── lr0.c                           # LR(0)核心实现 (C)
+│   └── grammer.txt                     # 文法规则文件
+│
+└── README.md                           # 项目说明文档</pre>
+                </div>
+
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="bg-white rounded-lg shadow p-6">
                         <h2 class="text-xl font-semibold mb-4">📐 实验一</h2>
-                        <p class="text-gray-600">DFA模拟器：加载dfa_in_1.txt，支持合法性检查、枚举接受字符串、判断字符串是否被接受。</p>
-                        <p class="text-sm text-gray-400 mt-2">核心文件：dfa.cpp, dfa_in_1.txt</p>
-                        <button class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 go-to-exp1">进入实验一</button>
+                        <p class="text-gray-600">DFA模拟器：加载 dfa_in_1.txt，支持合法性检查、枚举接受字符串、字符串识别。</p>
+                        <p class="text-sm text-gray-400 mt-2">📄 experiment1/dfa.cpp</p>
+                        <p class="text-sm text-gray-400">📄 experiment1/dfa_in_1.txt</p>
+                        <button class="go-to-exp1 mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">进入实验一</button>
                     </div>
                     <div class="bg-white rounded-lg shadow p-6">
                         <h2 class="text-xl font-semibold mb-4">🔡 实验二</h2>
-                        <p class="text-gray-600">词法分析器：加载dfa.txt，识别ID、INT、FLOAT、运算符，输出Token流。</p>
-                        <p class="text-sm text-gray-400 mt-2">核心文件：scanner.c, dfa.txt, test.src</p>
-                        <button class="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 go-to-exp2">进入实验二</button>
+                        <p class="text-gray-600">词法分析器：加载 dfa.txt，识别 ID、INT、FLOAT、运算符，输出 Token 流。</p>
+                        <p class="text-sm text-gray-400 mt-2">📄 experiment2/scanner.c</p>
+                        <p class="text-sm text-gray-400">📄 experiment2/dfa.txt</p>
+                        <p class="text-sm text-gray-400">📄 experiment2/test.src</p>
+                        <button class="go-to-exp2 mt-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">进入实验二</button>
                     </div>
                     <div class="bg-white rounded-lg shadow p-6">
                         <h2 class="text-xl font-semibold mb-4">🔍 实验三</h2>
-                        <p class="text-gray-600">LR(0)项目集规范族：加载grammer.txt，生成项目集、GOTO图、检测冲突。</p>
-                        <p class="text-sm text-gray-400 mt-2">核心文件：lr0.c, grammer.txt</p>
-                        <button class="mt-4 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 go-to-exp3">进入实验三</button>
+                        <p class="text-gray-600">LR(0)项目集规范族：加载 grammer.txt，生成项目集、GOTO图、检测冲突。</p>
+                        <p class="text-sm text-gray-400 mt-2">📄 experiment3/lr0.c</p>
+                        <p class="text-sm text-gray-400">📄 experiment3/grammer.txt</p>
+                        <button class="go-to-exp3 mt-4 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600">进入实验三</button>
                     </div>
                 </div>
             </div>
 
-            <!-- ==================== 实验一：DFA模拟器 ==================== -->
+            <!-- 实验一：DFA模拟器 -->
             <div id="page-exp1" class="page-content">
                 <div class="bg-white rounded-lg shadow p-6">
-                    <h1 class="text-2xl font-bold mb-4">实验一：DFA 模拟器</h1>
-                    <p class="text-gray-600 mb-6">对应代码：<code class="bg-gray-100 px-2 py-1 rounded">dfa.cpp</code> + <code class="bg-gray-100 px-2 py-1 rounded">dfa_in_1.txt</code></p>
+                    <h1 class="text-2xl font-bold mb-2">实验一：DFA 模拟器</h1>
+                    <p class="text-gray-600 mb-4">对应代码：<code class="bg-gray-100 px-2 py-1 rounded">experiment1/dfa.cpp</code> + <code class="bg-gray-100 px-2 py-1 rounded">experiment1/dfa_in_1.txt</code></p>
                     
-                    <!-- DFA定义显示区 -->
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-3 mb-4 text-sm">
+                        <p class="font-semibold">📌 当前 DFA (dfa_in_1.txt)</p>
+                        <p class="text-gray-700">字符集: {a, b} | 状态集: {1,2,3,4} | 开始: 1 | 接受: {4}</p>
+                        <p class="text-gray-700">功能: 识别包含连续两个相同字符 (aa 或 bb) 的字符串</p>
+                    </div>
+
                     <div class="mb-6">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">DFA配置文件 (dfa_in_1.txt 格式)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">DFA配置文件 (dfa_in_1.txt)</label>
                         <textarea id="dfa-config" rows="12" class="w-full border border-gray-300 rounded-lg p-3 font-mono text-sm">a b
 ===
 1 2 3 4
@@ -106,34 +260,25 @@
                         </div>
                     </div>
 
-                    <!-- DFA信息和合法性检查结果 -->
-                    <div id="dfa-info" class="hidden mb-4 p-3 bg-gray-50 rounded-lg">
-                        <h2 class="font-semibold mb-2">📋 DFA信息</h2>
-                        <div id="dfa-info-content" class="font-mono text-sm"></div>
-                    </div>
-
                     <div id="dfa-validation" class="hidden mb-4 p-3 rounded-lg">
                         <div id="dfa-validation-content"></div>
                     </div>
 
-                    <!-- 功能测试区 -->
                     <div id="dfa-test-area" class="hidden">
                         <div class="border-t pt-4 mb-4">
                             <h2 class="text-lg font-semibold mb-3">🔧 功能测试</h2>
                             
-                            <!-- 功能1：枚举长度≤N的字符串 -->
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-1">功能1：枚举长度 ≤ N 的所有接受字符串</label>
                                 <div class="flex gap-3">
-                                    <input type="number" id="dfa-n" placeholder="N" class="border border-gray-300 rounded-lg p-2 w-32">
+                                    <input type="number" id="dfa-n" placeholder="N (如: 3)" class="border border-gray-300 rounded-lg p-2 w-32">
                                     <button id="dfa-enumerate" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">枚举</button>
                                 </div>
                                 <div id="dfa-strings-result" class="mt-2 p-3 bg-gray-50 rounded-lg font-mono text-sm"></div>
                             </div>
                             
-                            <!-- 功能2：判断字符串是否被接受 -->
                             <div class="mb-4">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">功能2：判断输入字符串是否被接受</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">功能2：判断字符串是否被接受</label>
                                 <div class="flex gap-3">
                                     <input type="text" id="dfa-test-string" placeholder="输入字符串 (如: aab)" class="border border-gray-300 rounded-lg p-2 flex-1">
                                     <button id="dfa-test" class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600">测试</button>
@@ -142,7 +287,6 @@
                             </div>
                         </div>
                         
-                        <!-- 状态转移图 -->
                         <div class="mb-4">
                             <h2 class="text-lg font-semibold mb-3">🎨 状态转移图</h2>
                             <div id="dfa-graph-container" class="border border-gray-200 rounded-lg bg-white" style="height: 400px;"></div>
@@ -151,31 +295,15 @@
                 </div>
             </div>
 
-            <!-- ==================== 实验二：词法分析器 ==================== -->
+            <!-- 实验二：词法分析器 -->
             <div id="page-exp2" class="page-content">
                 <div class="bg-white rounded-lg shadow p-6">
-                    <h1 class="text-2xl font-bold mb-4">实验二：词法分析器 (Scanner)</h1>
-                    <p class="text-gray-600 mb-6">对应代码：<code class="bg-gray-100 px-2 py-1 rounded">scanner.c</code> + <code class="bg-gray-100 px-2 py-1 rounded">dfa.txt</code></p>
+                    <h1 class="text-2xl font-bold mb-2">实验二：词法分析器 (Scanner)</h1>
+                    <p class="text-gray-600 mb-4">对应代码：<code class="bg-gray-100 px-2 py-1 rounded">experiment2/scanner.c</code> + <code class="bg-gray-100 px-2 py-1 rounded">experiment2/dfa.txt</code></p>
                     
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">DFA规则文件 (dfa.txt)</label>
-                        <textarea id="scanner-dfa" rows="8" class="w-full border border-gray-300 rounded-lg p-3 font-mono text-sm">a b c d e f g h i j k l m n o p q r s t u v w x y z A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 0 1 2 3 4 5 6 7 8 9 + - = ; .
-===
-0 1 2 3 4 5 6 7 8 9 10 11 12
-===
-0
-===
-1 2 3 4 5 6 7 8 11 12
-===
-0 a 1
-0 b 1
-0 + 2
-0 - 3
-0 = 4
-0 ; 5
-0 . 6
-0 0 7</textarea>
-                        <button id="scanner-load-dfa" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">加载DFA规则</button>
+                    <div class="bg-green-50 border-l-4 border-green-500 p-3 mb-4 text-sm">
+                        <p class="font-semibold">📌 支持的 Token 类型</p>
+                        <p class="text-gray-700">ID (标识符) | INT (整型常量) | FLOAT (浮点常量) | ASSIGN (=) | PLUS (+) | MINUS (-) | SCO (;) | DOT (.)</p>
                     </div>
 
                     <div class="mb-6">
@@ -191,7 +319,7 @@ b = b - 2;</textarea>
                         <div class="flex gap-3 mt-3">
                             <button id="scanner-parse" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">词法分析</button>
                             <label class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 cursor-pointer">
-                                上传源代码文件
+                                上传文件
                                 <input type="file" id="scanner-upload" accept=".txt,.c,.src" class="hidden">
                             </label>
                             <button id="scanner-clear" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">清空</button>
@@ -205,12 +333,19 @@ b = b - 2;</textarea>
                 </div>
             </div>
 
-            <!-- ==================== 实验三：LR(0)项目集规范族 ==================== -->
+            <!-- 实验三：LR(0)项目集 -->
             <div id="page-exp3" class="page-content">
                 <div class="bg-white rounded-lg shadow p-6">
-                    <h1 class="text-2xl font-bold mb-4">实验三：LR(0) 项目集规范族</h1>
-                    <p class="text-gray-600 mb-6">对应代码：<code class="bg-gray-100 px-2 py-1 rounded">lr0.c</code> + <code class="bg-gray-100 px-2 py-1 rounded">grammer.txt</code></p>
+                    <h1 class="text-2xl font-bold mb-2">实验三：LR(0) 项目集规范族</h1>
+                    <p class="text-gray-600 mb-4">对应代码：<code class="bg-gray-100 px-2 py-1 rounded">experiment3/lr0.c</code> + <code class="bg-gray-100 px-2 py-1 rounded">experiment3/grammer.txt</code></p>
                     
+                    <div class="bg-purple-50 border-l-4 border-purple-500 p-3 mb-4 text-sm">
+                        <p class="font-semibold">📌 当前文法 (grammer.txt)</p>
+                        <p class="text-gray-700">E -&gt; E + T | T</p>
+                        <p class="text-gray-700">T -&gt; T * F | F</p>
+                        <p class="text-gray-700">F -&gt; ( E ) | id</p>
+                    </div>
+
                     <div class="mb-6">
                         <label class="block text-sm font-medium text-gray-700 mb-2">文法规则 (grammer.txt)</label>
                         <textarea id="grammar-input" rows="8" class="w-full border border-gray-300 rounded-lg p-3 font-mono text-sm"># 算术表达式文法
@@ -223,7 +358,7 @@ F -> id</textarea>
                         <div class="flex gap-3 mt-3">
                             <button id="parse-grammar" class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600">解析并生成项目集</button>
                             <label class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 cursor-pointer">
-                                上传文法文件
+                                上传文件
                                 <input type="file" id="grammar-upload" accept=".txt" class="hidden">
                             </label>
                         </div>
@@ -231,7 +366,7 @@ F -> id</textarea>
 
                     <div id="lr0-result-area" class="hidden">
                         <div class="mb-6">
-                            <h2 class="text-lg font-semibold mb-3">📋 产生式列表</h2>
+                            <h2 class="text-lg font-semibold mb-3">📋 产生式列表（含增广文法）</h2>
                             <div id="productions-list" class="bg-gray-50 rounded-lg p-4 font-mono text-sm"></div>
                         </div>
                         <div class="mb-6">
@@ -254,28 +389,36 @@ F -> id</textarea>
             <div id="page-about" class="page-content">
                 <div class="bg-white rounded-lg shadow p-6">
                     <h1 class="text-2xl font-bold mb-4">关于本项目</h1>
-                    <p class="text-gray-600 mb-4">编译原理实验平台 - 基于C/C++实现，前端可视化展示</p>
                     
-                    <div class="border-t pt-4 mt-4">
-                        <h2 class="font-semibold mb-2">📁 项目文件结构</h2>
-                        <pre class="bg-gray-100 p-3 rounded-lg text-sm">
+                    <div class="mb-6">
+                        <h2 class="font-semibold mb-2">📁 项目架构</h2>
+                        <pre class="bg-gray-800 text-green-400 p-4 rounded-lg text-sm overflow-x-auto" style="font-family: monospace;">
 compiler-lab/
-├── index.html          # 主页面
-├── style.css           # 样式文件
-├── app.js              # 页面切换
-├── dfa.js              # 实验一：DFA模拟器 (对应 dfa.cpp)
-├── scanner.js          # 实验二：词法分析器 (对应 scanner.c)
-├── lr0.js              # 实验三：LR(0)项目集 (对应 lr0.c)
-├── dfa_in_1.txt        # 实验一 DFA配置
-├── dfa.txt             # 实验二 DFA规则
-├── test.src            # 实验二 测试源码
-└── grammer.txt         # 实验三 文法规则</pre>
+│
+├── index.html                          # 主页面
+├── style.css                           # 样式文件
+├── app.js                              # 页面切换逻辑
+│
+├── experiment1/                        # 实验一：DFA模拟器
+│   ├── dfa.cpp                         # DFA核心实现 (C++)
+│   └── dfa_in_1.txt                    # DFA配置文件
+│
+├── experiment2/                        # 实验二：词法分析器
+│   ├── scanner.c                       # 词法分析器实现 (C)
+│   ├── dfa.txt                         # DFA词法规则
+│   └── test.src                        # 测试源代码
+│
+├── experiment3/                        # 实验三：LR(0)项目集
+│   ├── lr0.c                           # LR(0)核心实现 (C)
+│   └── grammer.txt                     # 文法规则文件
+│
+└── README.md                           # 项目说明文档</pre>
                     </div>
-                    
+
                     <div class="border-t pt-4 mt-4">
-                        <h2 class="font-semibold mb-2">📐 实验一 (dfa.cpp)</h2>
+                        <h2 class="font-semibold mb-2">📐 实验一 (experiment1/dfa.cpp)</h2>
                         <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4">
-                            <li>加载 dfa_in_1.txt 五元组配置</li>
+                            <li>加载 experiment1/dfa_in_1.txt 五元组配置</li>
                             <li>DFA合法性检查：开始状态、接受状态、转换表完整性</li>
                             <li>枚举长度≤N的所有接受字符串 (BFS)</li>
                             <li>判断输入字符串是否被接受</li>
@@ -283,9 +426,9 @@ compiler-lab/
                     </div>
                     
                     <div class="border-t pt-4 mt-4">
-                        <h2 class="font-semibold mb-2">🔡 实验二 (scanner.c)</h2>
+                        <h2 class="font-semibold mb-2">🔡 实验二 (experiment2/scanner.c)</h2>
                         <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4">
-                            <li>加载 dfa.txt 词法规则</li>
+                            <li>加载 experiment2/dfa.txt 词法规则</li>
                             <li>识别标识符(ID)、整型常量(INT)、浮点常量(FLOAT)</li>
                             <li>识别运算符: = + - ; .</li>
                             <li>输出格式: (Token类型, 原始单词)</li>
@@ -293,9 +436,9 @@ compiler-lab/
                     </div>
                     
                     <div class="border-t pt-4 mt-4">
-                        <h2 class="font-semibold mb-2">🔍 实验三 (lr0.c)</h2>
+                        <h2 class="font-semibold mb-2">🔍 实验三 (experiment3/lr0.c)</h2>
                         <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4">
-                            <li>加载 grammer.txt 文法规则</li>
+                            <li>加载 experiment3/grammer.txt 文法规则</li>
                             <li>增广文法 (添加 S' → S)</li>
                             <li>计算闭包(Closure)和Goto转移</li>
                             <li>生成LR(0)项目集规范族</li>
@@ -313,9 +456,637 @@ compiler-lab/
         </main>
     </div>
 
-    <script src="dfa.js"></script>
-    <script src="scanner.js"></script>
-    <script src="lr0.js"></script>
-    <script src="app.js"></script>
+    <script>
+        // ==================== 页面切换 ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            const navItems = document.querySelectorAll('.nav-item');
+            const pages = document.querySelectorAll('.page-content');
+            
+            function switchPage(pageId) {
+                pages.forEach(page => {
+                    page.classList.remove('active');
+                });
+                
+                const targetPage = document.getElementById(`page-${pageId}`);
+                if (targetPage) {
+                    targetPage.classList.add('active');
+                }
+                
+                navItems.forEach(item => {
+                    item.classList.remove('active');
+                    if (item.getAttribute('data-page') === pageId) {
+                        item.classList.add('active');
+                    }
+                });
+            }
+            
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const pageId = this.getAttribute('data-page');
+                    if (pageId) {
+                        switchPage(pageId);
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.go-to-exp1').forEach(btn => {
+                btn.addEventListener('click', () => switchPage('exp1'));
+            });
+            document.querySelectorAll('.go-to-exp2').forEach(btn => {
+                btn.addEventListener('click', () => switchPage('exp2'));
+            });
+            document.querySelectorAll('.go-to-exp3').forEach(btn => {
+                btn.addEventListener('click', () => switchPage('exp3'));
+            });
+        });
+
+        // ==================== 实验一：DFA模拟器 ====================
+        let currentDFA = null;
+        let dfaGraph = null;
+
+        function parseDFA(configText) {
+            const lines = configText.split('\n');
+            let section = -1;
+            let alphabet = '', states = '', start = '', accept = '', transitions = '';
+            
+            for (let line of lines) {
+                line = line.trim();
+                if (line === '===') {
+                    section++;
+                    continue;
+                }
+                if (line === '' || line.startsWith('#')) continue;
+                
+                switch(section) {
+                    case 0: alphabet = line; break;
+                    case 1: states = line; break;
+                    case 2: start = line; break;
+                    case 3: accept = line; break;
+                    case 4: transitions += (transitions ? '\n' : '') + line; break;
+                }
+            }
+            
+            const alphabetSet = new Set(alphabet.split(/\s+/));
+            const stateSet = new Set(states.split(/\s+/));
+            const startState = start;
+            const acceptSet = new Set(accept.split(/\s+/));
+            const transMap = new Map();
+            
+            const transLines = transitions.split('\n');
+            for (let line of transLines) {
+                const parts = line.trim().split(/\s+/);
+                if (parts.length >= 3) {
+                    transMap.set(`${parts[0]},${parts[1]}`, parts[2]);
+                }
+            }
+            
+            // 验证
+            const errors = [];
+            if (!stateSet.has(startState)) errors.push('开始状态不在状态集中');
+            if (acceptSet.size === 0) errors.push('接受状态集为空');
+            for (let s of acceptSet) {
+                if (!stateSet.has(s)) errors.push(`接受状态 ${s} 不在状态集中`);
+            }
+            for (let s of stateSet) {
+                for (let c of alphabetSet) {
+                    if (!transMap.has(`${s},${c}`)) {
+                        errors.push(`状态 ${s} 在字符 '${c}' 上缺少转换`);
+                    }
+                }
+            }
+            
+            return { valid: errors.length === 0, errors, alphabetSet, stateSet, startState, acceptSet, transMap };
+        }
+
+        function enumerateStrings(dfa, N) {
+            const result = [];
+            const queue = [{ state: dfa.startState, str: '' }];
+            const visited = new Set();
+            
+            while (queue.length > 0) {
+                const { state, str } = queue.shift();
+                const key = `${state},${str}`;
+                if (visited.has(key)) continue;
+                visited.add(key);
+                
+                if (str.length <= N && dfa.acceptSet.has(state)) {
+                    result.push(str);
+                }
+                
+                if (str.length < N) {
+                    for (let c of dfa.alphabetSet) {
+                        const nextState = dfa.transMap.get(`${state},${c}`);
+                        if (nextState) {
+                            queue.push({ state: nextState, str: str + c });
+                        }
+                    }
+                }
+            }
+            
+            return [...new Set(result)].sort((a,b) => a.length - b.length);
+        }
+
+        function testString(dfa, input) {
+            let currentState = dfa.startState;
+            const path = [currentState];
+            
+            for (let i = 0; i < input.length; i++) {
+                const c = input[i];
+                const nextState = dfa.transMap.get(`${currentState},${c}`);
+                if (!nextState) {
+                    return { accepted: false, path, reason: `无转换: δ(${currentState}, ${c}) 未定义` };
+                }
+                currentState = nextState;
+                path.push(currentState);
+            }
+            
+            const accepted = dfa.acceptSet.has(currentState);
+            return { accepted, path, reason: accepted ? `到达接受状态 ${currentState}` : `最终状态 ${currentState} 不是接受状态` };
+        }
+
+        function renderDFAGraph(dfa) {
+            const nodes = [];
+            const edges = [];
+            
+            for (let state of dfa.stateSet) {
+                const isAccept = dfa.acceptSet.has(state);
+                const isStart = state === dfa.startState;
+                nodes.push({
+                    id: state,
+                    label: isStart ? `${state} (开始)` : state,
+                    shape: isAccept ? 'doublecircle' : 'circle',
+                    color: isAccept ? { background: '#a5f3c3', border: '#059669' } : { background: '#e0e7ff', border: '#6366f1' }
+                });
+            }
+            
+            for (let [key, to] of dfa.transMap) {
+                const [from, char] = key.split(',');
+                edges.push({ from, to, label: char, arrows: 'to', font: { size: 12 } });
+            }
+            
+            const container = document.getElementById('dfa-graph-container');
+            if (container) {
+                const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
+                const options = {
+                    nodes: { shape: 'circle', size: 35, font: { size: 14 }, borderWidth: 2 },
+                    edges: { arrows: 'to', smooth: { type: 'curvedCW' }, font: { size: 12 } },
+                    physics: { enabled: true }
+                };
+                if (dfaGraph) dfaGraph.destroy();
+                dfaGraph = new vis.Network(container, data, options);
+            }
+        }
+
+        document.getElementById('dfa-load')?.addEventListener('click', function() {
+            const config = document.getElementById('dfa-config').value;
+            const result = parseDFA(config);
+            const validationDiv = document.getElementById('dfa-validation');
+            const validationContent = document.getElementById('dfa-validation-content');
+            
+            if (result.valid) {
+                currentDFA = result;
+                validationContent.innerHTML = '<div class="conflict-success">✅ DFA合法性检查通过！</div>';
+                validationDiv.classList.remove('hidden');
+                document.getElementById('dfa-test-area').classList.remove('hidden');
+                renderDFAGraph(result);
+            } else {
+                validationContent.innerHTML = `<div class="conflict-warning">❌ DFA合法性检查失败:<br>${result.errors.join('<br>')}</div>`;
+                validationDiv.classList.remove('hidden');
+                document.getElementById('dfa-test-area').classList.add('hidden');
+            }
+        });
+
+        document.getElementById('dfa-enumerate')?.addEventListener('click', function() {
+            if (!currentDFA) { alert('请先加载DFA'); return; }
+            const N = parseInt(document.getElementById('dfa-n').value);
+            if (isNaN(N) || N < 0) { alert('请输入有效的N值'); return; }
+            const strings = enumerateStrings(currentDFA, N);
+            const resultDiv = document.getElementById('dfa-strings-result');
+            if (strings.length === 0) {
+                resultDiv.innerHTML = '<span class="text-gray-500">没有找到接受字符串</span>';
+            } else {
+                resultDiv.innerHTML = `<span class="text-gray-700">共 ${strings.length} 个字符串:</span><br><span class="text-blue-600">${strings.map(s => s === '' ? 'ε' : s).join(', ')}</span>`;
+            }
+        });
+
+        document.getElementById('dfa-test')?.addEventListener('click', function() {
+            if (!currentDFA) { alert('请先加载DFA'); return; }
+            const testStr = document.getElementById('dfa-test-string').value;
+            const result = testString(currentDFA, testStr);
+            const resultDiv = document.getElementById('dfa-test-result');
+            if (result.accepted) {
+                resultDiv.innerHTML = `<div class="conflict-success">✅ 字符串 "${testStr}" 被接受<br>路径: ${result.path.join(' → ')}<br>${result.reason}</div>`;
+            } else {
+                resultDiv.innerHTML = `<div class="conflict-warning">❌ 字符串 "${testStr}" 被拒绝<br>路径: ${result.path.join(' → ')}<br>${result.reason}</div>`;
+            }
+        });
+
+        document.getElementById('dfa-upload')?.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    document.getElementById('dfa-config').value = ev.target.result;
+                    document.getElementById('dfa-load').click();
+                };
+                reader.readAsText(e.target.files[0]);
+            }
+        });
+
+        // 默认加载
+        setTimeout(() => { document.getElementById('dfa-load')?.click(); }, 100);
+
+        // ==================== 实验二：词法分析器 ====================
+        const TokenType = { ID: 'ID', INT: 'INT', FLOAT: 'FLOAT', SCO: 'SCO', ASSIGN: 'ASSIGN', PLUS: 'PLUS', MINUS: 'MINUS', DOT: 'DOT', ERROR: 'ERROR' };
+        const tokenNames = { ID: 'ID', INT: 'INT', FLOAT: 'FLOAT', SCO: 'SCO', ASSIGN: 'ASSIGN', PLUS: 'PLUS', MINUS: 'MINUS', DOT: 'DOT', ERROR: 'ERROR' };
+
+        function isLetter(c) { return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'); }
+        function isDigit(c) { return c >= '0' && c <= '9'; }
+        function isWhitespace(c) { return c === ' ' || c === '\t' || c === '\n' || c === '\r'; }
+
+        function getTokenType(token) {
+            const len = token.length;
+            if (len === 0) return TokenType.ERROR;
+            if (isLetter(token[0])) {
+                for (let i = 1; i < len; i++) {
+                    if (!isLetter(token[i]) && !isDigit(token[i])) return TokenType.ERROR;
+                }
+                return TokenType.ID;
+            }
+            let i = 0;
+            if (token[0] === '-') {
+                if (len === 1) return TokenType.MINUS;
+                if (isDigit(token[1]) || token[1] === '.') i = 1;
+                else return TokenType.MINUS;
+            }
+            if (token[0] === '+' && len === 1) return TokenType.PLUS;
+            if (len === 1) {
+                if (token[0] === ';') return TokenType.SCO;
+                if (token[0] === '=') return TokenType.ASSIGN;
+                if (token[0] === '+') return TokenType.PLUS;
+                if (token[0] === '-') return TokenType.MINUS;
+                if (token[0] === '.') return TokenType.DOT;
+            }
+            let hasDot = false, hasE = false;
+            let j = i;
+            if (isDigit(token[j]) || token[j] === '.') {
+                for (; j < len; j++) {
+                    if (isDigit(token[j])) continue;
+                    else if (token[j] === '.') { if (hasDot) return TokenType.ERROR; hasDot = true; }
+                    else if (token[j] === 'e' || token[j] === 'E') { if (hasE) return TokenType.ERROR; hasE = true; if (j+1 < len && (token[j+1] === '+' || token[j+1] === '-')) j++; }
+                    else return TokenType.ERROR;
+                }
+                if (hasDot || hasE) return TokenType.FLOAT;
+                return TokenType.INT;
+            }
+            return TokenType.ERROR;
+        }
+
+        function getNextToken(input, pos) {
+            const len = input.length;
+            while (pos < len && isWhitespace(input[pos])) pos++;
+            if (pos >= len) return { token: null, type: null, newPos: pos };
+            const start = pos;
+            const c = input[start];
+            if (c === ';' || c === '=' || c === '+' || c === '-' || c === '.') {
+                return { token: c, type: getTokenType(c), newPos: pos + 1 };
+            }
+            if (isLetter(c)) {
+                while (pos < len && (isLetter(input[pos]) || isDigit(input[pos]))) pos++;
+                const token = input.substring(start, pos);
+                return { token, type: getTokenType(token), newPos: pos };
+            }
+            if (isDigit(c) || c === '.') {
+                while (pos < len) {
+                    const cur = input[pos];
+                    if (isDigit(cur)) pos++;
+                    else if (cur === '.') pos++;
+                    else if (cur === 'e' || cur === 'E') { pos++; if (pos < len && (input[pos] === '+' || input[pos] === '-')) pos++; }
+                    else break;
+                }
+                if (pos > start) {
+                    const token = input.substring(start, pos);
+                    return { token, type: getTokenType(token), newPos: pos };
+                }
+            }
+            return { token: input[pos], type: TokenType.ERROR, newPos: pos + 1 };
+        }
+
+        function lexicalAnalysis(input) {
+            const tokens = [];
+            let pos = 0;
+            while (pos < input.length) {
+                const { token, type, newPos } = getNextToken(input, pos);
+                if (token !== null && token !== '') tokens.push({ token, type });
+                pos = newPos;
+            }
+            return tokens;
+        }
+
+        function renderScannerTokens(tokens) {
+            let html = '';
+            for (const tk of tokens) {
+                let color = 'text-green-400';
+                if (tk.type === 'ERROR') color = 'text-red-400';
+                else if (tk.type === 'ID') color = 'text-yellow-400';
+                else if (tk.type === 'INT') color = 'text-blue-400';
+                else if (tk.type === 'FLOAT') color = 'text-purple-400';
+                html += `<div class="${color}">(${tk.type}, ${tk.token})</div>`;
+            }
+            return html;
+        }
+
+        document.getElementById('scanner-parse')?.addEventListener('click', function() {
+            const input = document.getElementById('scanner-input').value;
+            const tokens = lexicalAnalysis(input);
+            const outputDiv = document.getElementById('scanner-output');
+            outputDiv.innerHTML = renderScannerTokens(tokens);
+            document.getElementById('scanner-result-area').classList.remove('hidden');
+        });
+
+        document.getElementById('scanner-clear')?.addEventListener('click', function() {
+            document.getElementById('scanner-input').value = '';
+            document.getElementById('scanner-output').innerHTML = '';
+            document.getElementById('scanner-result-area').classList.add('hidden');
+        });
+
+        document.getElementById('scanner-upload')?.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    document.getElementById('scanner-input').value = ev.target.result;
+                    document.getElementById('scanner-parse').click();
+                };
+                reader.readAsText(e.target.files[0]);
+            }
+        });
+
+        // ==================== 实验三：LR(0)项目集 ====================
+        let lr0Productions = [];
+        let lr0ItemSets = [];
+        let lr0Graph = null;
+
+        class Production {
+            constructor(left, right) { this.left = left; this.right = right; this.rightLen = right.length; }
+        }
+
+        class Item {
+            constructor(prodId, dotPos) { this.prodId = prodId; this.dotPos = dotPos; }
+            equals(other) { return this.prodId === other.prodId && this.dotPos === other.dotPos; }
+            toString(prods) {
+                const prod = prods[this.prodId];
+                let result = prod.left + " -> ";
+                for (let i = 0; i < prod.rightLen; i++) {
+                    if (i === this.dotPos) result += "·";
+                    result += prod.right[i];
+                    if (i < prod.rightLen - 1) result += " ";
+                }
+                if (this.dotPos === prod.rightLen) result += "·";
+                return result;
+            }
+        }
+
+        class ItemSet {
+            constructor(id) { this.id = id; this.items = []; this.transitions = {}; }
+            addItem(item) { if (!this.hasItem(item)) { this.items.push(item); return true; } return false; }
+            hasItem(item) { return this.items.some(i => i.equals(item)); }
+            equals(other) {
+                if (this.items.length !== other.items.length) return false;
+                for (let item of this.items) if (!other.hasItem(item)) return false;
+                return true;
+            }
+        }
+
+        function parseGrammar(grammarStr) {
+            const productions = [];
+            const lines = grammarStr.split('\n');
+            for (let line of lines) {
+                line = line.trim();
+                if (line === '' || line.startsWith('#')) continue;
+                const arrowIndex = line.indexOf('->');
+                if (arrowIndex === -1) continue;
+                const left = line.substring(0, arrowIndex).trim();
+                let rightPart = line.substring(arrowIndex + 2).trim();
+                const rights = rightPart.split('|');
+                for (let right of rights) {
+                    right = right.trim();
+                    const rightSymbols = right.split(/\s+/).filter(s => s !== '');
+                    if (rightSymbols.length > 0) {
+                        productions.push(new Production(left, rightSymbols));
+                    }
+                }
+            }
+            return productions;
+        }
+
+        function isTerminal(symbol) {
+            if (symbol.length === 1) {
+                const c = symbol[0];
+                if (c === '+' || c === '-' || c === '*' || c === '/' || c === '(' || c === ')' || c === ';' || c === '=') return true;
+            }
+            if (symbol === 'id') return true;
+            return !(symbol[0] >= 'A' && symbol[0] <= 'Z');
+        }
+
+        function getSymbols(productions) {
+            const symbols = new Set();
+            for (let prod of productions) {
+                symbols.add(prod.left);
+                for (let sym of prod.right) symbols.add(sym);
+            }
+            return Array.from(symbols);
+        }
+
+        function closure(itemSet, productions, prodCount) {
+            let changed = true;
+            while (changed) {
+                changed = false;
+                const itemsCopy = [...itemSet.items];
+                for (let item of itemsCopy) {
+                    const prod = productions[item.prodId];
+                    if (item.dotPos < prod.rightLen) {
+                        const symbol = prod.right[item.dotPos];
+                        if (!isTerminal(symbol)) {
+                            for (let i = 0; i < prodCount; i++) {
+                                if (productions[i].left === symbol) {
+                                    const newItem = new Item(i, 0);
+                                    if (itemSet.addItem(newItem)) changed = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        function gotoSet(itemSet, symbol, productions, prodCount) {
+            const newSet = new ItemSet(-1);
+            for (let item of itemSet.items) {
+                const prod = productions[item.prodId];
+                if (item.dotPos < prod.rightLen && prod.right[item.dotPos] === symbol) {
+                    newSet.addItem(new Item(item.prodId, item.dotPos + 1));
+                }
+            }
+            if (newSet.items.length > 0) closure(newSet, productions, prodCount);
+            return newSet;
+        }
+
+        function findItemSet(sets, target) {
+            for (let i = 0; i < sets.length; i++) {
+                if (sets[i].equals(target)) return i;
+            }
+            return -1;
+        }
+
+        function buildLR0Items(productions, startSymbol) {
+            const prodCount = productions.length;
+            const symbols = getSymbols(productions);
+            const augmentedLeft = startSymbol + "'";
+            productions.push(new Production(augmentedLeft, [startSymbol]));
+            const newProdCount = productions.length;
+            
+            const I0 = new ItemSet(0);
+            I0.addItem(new Item(newProdCount - 1, 0));
+            closure(I0, productions, newProdCount);
+            
+            const itemSets = [I0];
+            let changed = true;
+            while (changed) {
+                changed = false;
+                for (let i = 0; i < itemSets.length; i++) {
+                    const current = itemSets[i];
+                    for (let sym of symbols) {
+                        const next = gotoSet(current, sym, productions, newProdCount);
+                        if (next.items.length > 0) {
+                            let existing = findItemSet(itemSets, next);
+                            if (existing === -1) {
+                                next.id = itemSets.length;
+                                itemSets.push(next);
+                                existing = itemSets.length - 1;
+                                changed = true;
+                            }
+                            current.transitions[sym] = existing;
+                        }
+                    }
+                }
+            }
+            return { productions, itemSets };
+        }
+
+        function checkConflicts(itemSets, productions) {
+            const conflicts = [];
+            for (let set of itemSets) {
+                let reduceCount = 0;
+                let shiftCount = 0;
+                for (let item of set.items) {
+                    const prod = productions[item.prodId];
+                    if (item.dotPos === prod.rightLen) reduceCount++;
+                    else if (item.dotPos < prod.rightLen) {
+                        const symbol = prod.right[item.dotPos];
+                        if (isTerminal(symbol)) shiftCount++;
+                    }
+                }
+                if (reduceCount > 1) conflicts.push({ setId: set.id, type: 'reduce-reduce', count: reduceCount });
+                if (shiftCount > 0 && reduceCount > 0) conflicts.push({ setId: set.id, type: 'shift-reduce', shiftCount, reduceCount });
+            }
+            return conflicts;
+        }
+
+        function renderProductions(productions) {
+            let html = '';
+            for (let i = 0; i < productions.length; i++) {
+                const p = productions[i];
+                html += `<div>${i}: ${p.left} -> ${p.right.join(' ')}</div>`;
+            }
+            return html;
+        }
+
+        function renderItemSets(itemSets, productions) {
+            let html = '';
+            for (let set of itemSets) {
+                html += `<div class="item-set">`;
+                html += `<div class="item-set-header">I${set.id} (${set.items.length}个项目)</div>`;
+                html += `<div class="item-set-content">`;
+                html += `<ul>`;
+                for (let item of set.items) {
+                    html += `<li>${item.toString(productions)}</li>`;
+                }
+                html += `</ul>`;
+                if (Object.keys(set.transitions).length > 0) {
+                    html += `<div class="transition-list">`;
+                    for (let [sym, targetId] of Object.entries(set.transitions)) {
+                        html += `<span class="transition-item">${sym} → I${targetId}</span>`;
+                    }
+                    html += `</div>`;
+                }
+                html += `</div></div>`;
+            }
+            return html;
+        }
+
+        function renderConflicts(conflicts) {
+            if (conflicts.length === 0) return '<div class="conflict-success">✅ 无 LR(0) 冲突，该文法是 LR(0) 文法</div>';
+            let html = `<div class="conflict-warning">❌ 发现 ${conflicts.length} 处冲突</div>`;
+            for (let c of conflicts) {
+                if (c.type === 'shift-reduce') {
+                    html += `<div class="conflict-warning mt-2">⚠️ I${c.setId}: 移进-归约冲突！有 ${c.shiftCount} 个移进项目，${c.reduceCount} 个归约项目</div>`;
+                } else if (c.type === 'reduce-reduce') {
+                    html += `<div class="conflict-warning mt-2">⚠️ I${c.setId}: 归约-归约冲突！有 ${c.count} 个归约项目</div>`;
+                }
+            }
+            return html;
+        }
+
+        function renderGotoGraph(itemSets) {
+            const nodes = [];
+            const edges = [];
+            for (let set of itemSets) {
+                let isAccept = false;
+                nodes.push({ id: set.id, label: `I${set.id}`, shape: 'circle', color: { background: '#e0e7ff', border: '#6366f1' } });
+                for (let [sym, targetId] of Object.entries(set.transitions)) {
+                    edges.push({ from: set.id, to: targetId, label: sym, arrows: 'to', font: { size: 12 } });
+                }
+            }
+            const container = document.getElementById('graph-container');
+            if (container) {
+                const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
+                const options = {
+                    nodes: { shape: 'circle', size: 35, font: { size: 14 }, borderWidth: 2 },
+                    edges: { arrows: 'to', smooth: { type: 'curvedCW' }, font: { size: 12 } },
+                    physics: { enabled: true }
+                };
+                if (lr0Graph) lr0Graph.destroy();
+                lr0Graph = new vis.Network(container, data, options);
+            }
+        }
+
+        document.getElementById('parse-grammar')?.addEventListener('click', function() {
+            const grammarInput = document.getElementById('grammar-input').value;
+            let productions = parseGrammar(grammarInput);
+            if (productions.length === 0) { alert('无法解析文法'); return; }
+            const startSymbol = productions[0].left;
+            const { productions: newProds, itemSets } = buildLR0Items(productions, startSymbol);
+            const conflicts = checkConflicts(itemSets, newProds);
+            
+            document.getElementById('productions-list').innerHTML = renderProductions(newProds);
+            document.getElementById('item-sets-list').innerHTML = renderItemSets(itemSets, newProds);
+            document.getElementById('conflict-result').innerHTML = renderConflicts(conflicts);
+            renderGotoGraph(itemSets);
+            document.getElementById('lr0-result-area').classList.remove('hidden');
+        });
+
+        document.getElementById('grammar-upload')?.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    document.getElementById('grammar-input').value = ev.target.result;
+                    document.getElementById('parse-grammar').click();
+                };
+                reader.readAsText(e.target.files[0]);
+            }
+        });
+
+        // 默认加载实验三
+        setTimeout(() => { document.getElementById('parse-grammar')?.click(); }, 200);
+    </script>
 </body>
 </html>
