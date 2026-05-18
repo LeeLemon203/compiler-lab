@@ -2,16 +2,16 @@
 
 <div align="center">
 
-![GitHub repo size](https://img.shields.io/github/repo-size/leelemon/compiler-lab)
-![GitHub language count](https://img.shields.io/github/languages/count/leelemon/compiler-lab)
-![GitHub last commit](https://img.shields.io/github/last-commit/leelemon/compiler-lab)
+![GitHub repo size](https://img.shields.io/github/repo-size/LeeLemon203/compiler-lab)
+![GitHub language count](https://img.shields.io/github/languages/count/LeeLemon203/compiler-lab)
+![GitHub last commit](https://img.shields.io/github/last-commit/LeeLemon203/compiler-lab)
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
 
 **编译器设计专题实验 - 实验三：LR(0) 项目集规范族构建与可视化**
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-blue)](https://leelemon.github.io/compiler-lab/)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-blue)](https://LeeLemon203.github.io/compiler-lab/)
 [![Report](https://img.shields.io/badge/Report-实验报告-green)](./docs/实验三报告.md)
 
 </div>
