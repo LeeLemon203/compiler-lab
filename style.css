@@ -1,0 +1,128 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.page-content {
+    display: none;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.page-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.nav-item {
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.nav-item:hover {
+    background-color: #f3f4f6;
+}
+
+.nav-item.active {
+    background-color: #eff6ff;
+}
+
+.nav-item.active span {
+    color: #2563eb;
+    font-weight: 500;
+}
+
+.nav-section {
+    padding: 8px 12px;
+}
+
+.item-set {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    background-color: white;
+}
+
+.item-set-header {
+    background-color: #f9fafb;
+    padding: 8px 12px;
+    border-bottom: 1px solid #e5e7eb;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.item-set-content {
+    padding: 12px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+}
+
+.item-set-content ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.item-set-content li {
+    padding: 2px 0;
+    font-family: monospace;
+}
+
+.transition-list {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed #e5e7eb;
+    color: #6b7280;
+    font-size: 12px;
+}
+
+.transition-item {
+    display: inline-block;
+    background-color: #e0e7ff;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-right: 8px;
+    margin-bottom: 4px;
+    font-size: 11px;
+}
+
+.conflict-warning {
+    background-color: #fef2f2;
+    border-left: 4px solid #ef4444;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.conflict-success {
+    background-color: #f0fdf4;
+    border-left: 4px solid #22c55e;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+#graph-container {
+    min-height: 500px;
+    background-color: #fafafa;
+}
+
+@media (max-width: 768px) {
+    .flex {
+        flex-direction: column;
+    }
+    aside {
+        width: 100%;
+        height: auto;
+    }
+}
