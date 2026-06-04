@@ -2,11 +2,14 @@
 
 ## 项目简介
 
-本项目是《编译器设计专题实验》的完整实现，包含三个实验的 C/C++ 代码及前端可视化展示。
+本项目是《编译器设计专题实验》的完整实现，包含六个实验的 C/C++ 代码及前端可视化展示。
 
 - **实验一**：DFA 模拟器
 - **实验二**：词法分析器 (Scanner)
 - **实验三**：LR(0) 项目集规范族构建
+- **实验四**：SLR(1) 文法分析
+- **实验五**：语义分析 (符号表 + AST)
+- **实验六**：中间代码生成 (三地址码/四元式)
 
 ---
 
@@ -31,6 +34,18 @@ compiler-lab/
 ├── experiment3/                        # 实验三：LR(0)项目集
 │   ├── lr0.c                           # LR(0)核心实现 (C)
 │   └── grammer.txt                     # 文法规则文件
+│
+├── experiment4/                        # 实验四：SLR(1)文法分析
+│   ├── slr1.c                          # SLR(1)核心实现 (C)
+│   └── grammer.txt                     # 文法规则文件
+│
+├── experiment5/                        # 实验五：语义分析
+│   ├── experiment5.c                   # 语义分析实现 (C)
+│   └── test.c                          # 测试源代码
+│
+├── experiment6/                        # 实验六：中间代码生成
+│   ├── experiment6.c                   # 中间代码生成实现 (C)
+│   └── test.c                          # 测试源代码
 │
 └── README.md                           # 项目说明文档
 ```
@@ -106,22 +121,8 @@ g++ dfa.cpp -o dfa
 开始状态: 1
 接受状态集: 4
 转换表: 8 条规则
-  δ(1, 'a') = 2
-  δ(1, 'b') = 3
-  δ(2, 'a') = 4
-  δ(2, 'b') = 3
-  δ(3, 'a') = 2
-  δ(3, 'b') = 4
-  δ(4, 'a') = 4
-  δ(4, 'b') = 4
 
 ========== DFA合法性检查 ==========
-1. 开始状态检查: ✓ 开始状态 1 在状态集中
-2. 接受状态集检查: ✓ 接受状态集非空，共 1 个状态: 4
-3. 接受状态子集检查: ✓ 所有接受状态都在状态集中
-4. 状态转换表检查: ✓ 共 8 条转换规则，全部合法
-5. 转换表完整性检查: ✓ 转换表完整
-
 ✅ DFA合法性检查通过！
 
 ╔══════════════════════════════════╗
@@ -131,7 +132,6 @@ g++ dfa.cpp -o dfa
 ║  2. 判断输入字符串是否被接受    ║
 ║  3. 退出                        ║
 ╚══════════════════════════════════╝
-请选择操作:
 ```
 
 ---
@@ -183,61 +183,6 @@ gcc scanner.c -o scanner
 ./scanner
 ```
 
-### 运行示例
-
-```
-========================================
-    词法分析器 Scanner (实验二)
-    基于 DFA 规则文件
-========================================
-
-正在加载 DFA 规则文件: dfa.txt
-  字符集 (67): a b c d e f g h i j k l m n o p q r s t ...
-  状态数: 13
-  开始状态: 0
-  接受状态数: 10
-  DFA加载成功！
-
-是否将结果保存到文件？(y/n)：y
-请输入输出文件名：output.txt
-
-请选择运行模式：
-  模式2：整句词法分析
-  模式3：从文件读取源代码并分析
-请输入模式 (2 或 3)：3
-
-请输入源代码文件名：test.src
-正在分析文件: test.src
-Token流将保存到: output.txt
-
-(ID, int)
-(ID, a)
-(ASSIGN, =)
-(INT, 10)
-(SCO, ;)
-(ID, float)
-(ID, b)
-(ASSIGN, =)
-(FLOAT, 3.14)
-(SCO, ;)
-...
-
-分析完成！共处理 8 行，识别 44 个Token
-```
-
-### test.src 测试文件内容
-
-```
-int a = 10;
-float b = 3.14;
-float c = .5;
-float d = 1e-3;
-float e = -3.14;
-int f = -100;
-a = a + 5;
-b = b - 2;
-```
-
 ---
 
 ## 实验三：LR(0) 项目集规范族
@@ -271,7 +216,6 @@ F -> id
 | Goto 计算 | `goto_set()` | 计算符号转移后的项目集 |
 | 构建项目集 | `build_lr0_items()` | 生成完整 LR(0) 项目集规范族 |
 | 冲突检测 | `check_conflicts()` | 检测移进-归约和归约-归约冲突 |
-| Graphviz输出 | `print_graphviz()` | 输出 DOT 格式的 GOTO 图 |
 
 ### LR(0) 项目分类
 
@@ -305,23 +249,7 @@ I1:
     E -> E· + T
     转移:
         + -> I6
-
-I2:
-    E -> T·
-    T -> T· * F
-    转移:
-        * -> I7
 ...
-```
-
-### 冲突检查结果
-
-```
-========== LR(0) 冲突检查 ==========
-  I1: ⚠ 移进-归约冲突！有 1 个移进项目，1 个归约项目
-  I2: ⚠ 移进-归约冲突！有 1 个移进项目，1 个归约项目
-  I9: ⚠ 移进-归约冲突！有 1 个移进项目，1 个归约项目
-  ❌ 存在 LR(0) 冲突，该文法不是 LR(0) 文法
 ```
 
 ### 编译运行
@@ -332,47 +260,308 @@ gcc lr0.c -o lr0
 ./lr0
 ```
 
-### 运行示例
+---
+
+## 实验四：SLR(1) 文法分析
+
+### 文件说明
+
+| 文件 | 说明 |
+|------|------|
+| `experiment4/slr1.c` | SLR(1) 核心实现，构建分析表、FIRST/FOLLOW集、语法分析 |
+| `experiment4/grammer.txt` | 文法规则文件 |
+
+### 功能说明
+
+| 功能 | 对应函数 | 说明 |
+|------|----------|------|
+| 解析文法 | `parse_grammar()` | 从文件读取文法规则 |
+| 增广文法 | - | 自动添加 S' → S |
+| 闭包计算 | `closure()` | 递归添加所有可达项目 |
+| Goto 计算 | `goto_set()` | 计算符号转移后的项目集 |
+| 构建项目集 | `build_lr0_items()` | 生成 LR(0) 项目集规范族 |
+| FIRST集计算 | `compute_first()` | 计算所有非终结符的FIRST集 |
+| FOLLOW集计算 | `compute_follow()` | 计算所有非终结符的FOLLOW集 |
+| 构建分析表 | `build_slr1_table()` | 构建 SLR(1) ACTION/GOTO 表 |
+| 语法分析 | `parse_input()` | 基于 SLR(1) 分析表进行语法分析 |
+
+### FIRST/FOLLOW 集输出示例
 
 ```
-========================================
-  实验三：LR(0) 项目集规范族构建
-========================================
+========== Computing FIRST Sets ==========
+  FIRST(E) = { ( id }
+  FIRST(T) = { ( id }
+  FIRST(F) = { ( id }
 
-请选择输入方式：
-  1：使用默认文法（算术表达式）
-  2：从文件读取文法
-请输入选择 (1 或 2)：2
-请输入文法文件名：grammer.txt
+========== Computing FOLLOW Sets ==========
+  FOLLOW(E) = { $ + ) }
+  FOLLOW(T) = { $ + ) * }
+  FOLLOW(F) = { $ + ) * }
+```
 
-========== 加载文法规则 ==========
-共加载 6 条产生式
-  0: E -> E + T
-  1: E -> T
-  2: T -> T * F
-  3: T -> F
-  4: F -> ( E )
-  5: F -> id
+### SLR(1) 分析表输出示例
 
-增广文法：
-  6: E' -> E
+```
+ACTION Table:
+        +         *         (         )         id        $
+     --------------------------------------------------------
+I0                         s4                 s5          
+I1    s6                           r1                 r1  
+I2    r2    s7                    r2                 r2  
+I3    r4    r4                    r4                 r4  
+I4                         s4                 s5          
+I5    r6    r6                    r6                 r6  
+I6                         s4                 s5          
+I7                         s4                 s5          
+I8    s6                           r0                 r0  
+I9    r3    r3                    r3                 r3  
+I10   r5    r5                    r5                 r5  
 
-========== 构建 LR(0) 项目集规范族 ==========
-共生成 12 个项目集
+GOTO Table:
+        E         T         F
+     -------------------------
+I0    1         2         3
+I4    8         2         3
+I6    9         3
+I7         10
+```
 
-========== LR(0) 项目集规范族 ==========
-...
+### 语法分析演示
+
+```
+Enter input string (space separated, e.g., id + id * id):
+id + id * id
+
+Step     State Stack                     Symbol Stack           Input                     Action
+----------------------------------------------------------------
+1        0                                                     id + id * id $             s5
+2        0 5                             id                    + id * id $               r6
+3        0 3                             F                     + id * id $               r4
+4        0 2                             T                     + id * id $               r2
+5        0 1                             E                     + id * id $               s6
+6        0 1 6                           E +                   id * id $                 s5
+7        0 1 6 5                         E + id                * id $                    r6
+8        0 1 6 3                         E + F                 * id $                    r4
+9        0 1 6 9                         E + T                 * id $                    s7
+10       0 1 6 9 7                       E + T *               id $                      s5
+11       0 1 6 9 7 5                     E + T * id            $                         r6
+12       0 1 6 9 7 10                    E + T * F             $                         r3
+13       0 1 6 9                         E + T                 $                         r1
+14       0 1                             E                     $                         acc
+
+[SUCCESS] Parsing completed!
+```
+
+### 编译运行
+
+```bash
+cd experiment4
+gcc slr1.c -o slr1
+./slr1
+```
+
+---
+
+## 实验五：语义分析
+
+### 文件说明
+
+| 文件 | 说明 |
+|------|------|
+| `experiment5/experiment5.c` | 语义分析实现，包含词法分析、语法分析、符号表管理、类型检查、AST构建 |
+| `experiment5/test.c` | 测试源代码文件 |
+
+### 支持的语法特性
+
+| 特性 | 说明 | 示例 |
+|------|------|------|
+| 变量声明 | int / float | `int x;` |
+| 赋值语句 | = | `x = 10;` |
+| 表达式 | + - * / | `z = x + y;` |
+| if语句 | if (条件) { ... } | `if (x > 5) { x = x - 5; }` |
+| while语句 | while (条件) { ... } | `while (x < 100) { x = x + 10; }` |
+| 作用域 | { ... } | 块级作用域支持 |
+
+### 符号表管理
+
+```c
+typedef struct Symbol {
+    char name[MAX_SYMBOL_LEN];
+    DataType type;           // TYPE_INT, TYPE_FLOAT, TYPE_VOID
+    int scope_level;         // 作用域层级
+    int is_initialized;      // 是否已初始化
+    struct Symbol* next;
+} Symbol;
+
+typedef struct Scope {
+    Symbol* symbols;
+    int level;
+    struct Scope* parent;
+} Scope;
+```
+
+### 抽象语法树 (AST) 节点类型
+
+```c
+typedef enum {
+    AST_PROGRAM, AST_VAR_DECL, AST_ASSIGNMENT, AST_BINARY_OP,
+    AST_VARIABLE, AST_CONSTANT, AST_IF_STMT, AST_WHILE_STMT, 
+    AST_BLOCK, AST_RETURN_STMT, AST_FUNC_CALL, AST_ARRAY_ACCESS,
+    AST_FUNC_DEF, AST_UNARY_OP, AST_PRINT_STMT
+} ASTNodeType;
+```
+
+### 输出示例
+
+```
+========== Symbol Table ==========
+Scope level 0:
+  x : int (uninitialized)
+  y : int (uninitialized)
+  z : float (uninitialized)
+
+========== Abstract Syntax Tree (AST) ==========
+Program
+  VarDecl: x
+  VarDecl: y
+  VarDecl: z
+  Assignment: x =
+    Const: 10
+  Assignment: y =
+    Const: 20
+  Assignment: z =
+    BinaryOp: +
+      Variable: x
+      Variable: y
+  IfStmt
+    BinaryOp: >
+      Variable: x
+      Const: 5
+    Block
+      Assignment: x =
+        BinaryOp: -
+          Variable: x
+          Const: 5
+  WhileStmt
+    BinaryOp: <
+      Variable: x
+      Const: 100
+    Block
+      Assignment: x =
+        BinaryOp: +
+          Variable: x
+          Const: 10
+
+[OK] Semantic analysis complete, no errors
+```
+
+### 编译运行
+
+```bash
+cd experiment5
+gcc experiment5.c -o exp5
+./exp5 test.c
+```
+
+---
+
+## 实验六：中间代码生成
+
+### 文件说明
+
+| 文件 | 说明 |
+|------|------|
+| `experiment6/experiment6.c` | 中间代码生成实现，生成三地址码和四元式 |
+| `experiment6/test.c` | 测试源代码文件 |
+
+### 四元式 (Quadruple) 格式
+
+```
+(op, arg1, arg2, result)
+```
+
+### 三地址码 (Three-Address Code) 格式
+
+```
+result = arg1 op arg2
+```
+
+### 支持的运算符
+
+| 类型 | 运算符 |
+|------|--------|
+| 算术运算符 | +, -, *, / |
+| 关系运算符 | <, <=, >, >=, ==, != |
+| 逻辑运算符 | &&, \|\|, ! |
+| 赋值运算符 | =, +=, -=, *=, /= |
+| 自增/自减 | ++, -- |
+
+### 控制流处理
+
+| 语句 | 生成的代码 |
+|------|-----------|
+| if (cond) { ... } | 条件跳转 + 标签 |
+| if (cond) { ... } else { ... } | 条件跳转 + 无条件跳转 + 标签 |
+| while (cond) { ... } | 标签 + 条件跳转 + 循环体 + 回跳 |
+
+### 输出示例
+
+```
+========== Intermediate Code (Quadruples) ==========
+1. (=, 10, , x)
+2. (=, 20, , y)
+3. (+, x, y, t0)
+4. (=, t0, , z)
+5. (if x > 5, , , goto L100)
+6. (-, x, 5, t1)
+7. (=, t1, , x)
+8. (label, L100, , )
+9. (label, L200, , )
+10. (if x < 100, , , goto L300)
+11. (+, x, 10, t2)
+12. (=, t2, , x)
+13. (goto, , , L200)
+14. (label, L300, , )
+
+========== Three-Address Code ==========
+x = 10
+y = 20
+t0 = x + y
+z = t0
+if x > 5 goto L100
+t1 = x - 5
+x = t1
+L100:
+L200:
+if x < 100 goto L300
+t2 = x + 10
+x = t2
+goto L200
+L300:
+
+[OK] Code generation complete, no errors. Generated 14 quadruples
+```
+
+### 编译运行
+
+```bash
+cd experiment6
+gcc experiment6.c -o exp6
+./exp6 test.c
 ```
 
 ---
 
 ## 前端可视化
 
-本项目同时提供 Web 前端界面，用于可视化展示三个实验的核心功能：
+本项目同时提供 Web 前端界面，用于可视化展示六个实验的核心功能：
 
 - **实验一**：DFA 状态转移图、合法性检查结果、枚举字符串、字符串测试
 - **实验二**：Token 流输出
 - **实验三**：产生式列表、项目集规范族、GOTO 图、冲突检查
+- **实验四**：LR(0)项目集、FIRST/FOLLOW集、SLR分析表、GOTO图、语法分析演示
+- **实验五**：符号表、抽象语法树(AST)、类型检查结果
+- **实验六**：四元式、三地址码、代码生成结果
 
 ### 运行前端
 
@@ -386,6 +575,19 @@ python3 -m http.server 8080
 # 浏览器访问
 http://localhost:8080
 ```
+
+---
+
+## 实验对比总览
+
+| 实验 | 名称 | 输入 | 输出 | 核心算法 |
+|------|------|------|------|----------|
+| 1 | DFA模拟器 | DFA五元组 | 接受字符串集合 | BFS枚举、状态转移 |
+| 2 | 词法分析器 | 源代码 | Token流 | DFA状态机 |
+| 3 | LR(0)项目集 | 文法规则 | 项目集、GOTO图 | 闭包、Goto函数 |
+| 4 | SLR(1)分析 | 文法规则 | 分析表、语法树 | FIRST/FOLLOW、SLR表 |
+| 5 | 语义分析 | 源代码 | 符号表、AST | 作用域、类型检查 |
+| 6 | 中间代码生成 | 源代码 | 四元式、三地址码 | 语法制导翻译 |
 
 ---
 
@@ -422,4 +624,6 @@ git push
 | C/C++ 编译器 | GCC / G++ 4.8+ |
 | Python (前端) | Python 3.x (可选) |
 | 浏览器 | Chrome / Firefox / Edge 最新版 |
+
+---
 

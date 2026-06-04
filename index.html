@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>编译原理实验平台 - 实验一/二/三</title>
+    <title>编译原理实验平台 - 实验一至六</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://unpkg.com/vis-network@9.1.2/dist/vis-network.min.js"></script>
     <style>
@@ -69,12 +69,23 @@
             padding: 8px 12px;
             border-bottom: 1px solid #e5e7eb;
             font-weight: 600;
+            cursor: pointer;
         }
 
         .item-set-content {
             padding: 12px;
-            font-family: monospace;
+            font-family: 'Courier New', monospace;
             font-size: 13px;
+        }
+
+        .item-set-content ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .item-set-content li {
+            padding: 2px 0;
+            font-family: monospace;
         }
 
         .transition-list {
@@ -115,6 +126,18 @@
             background-color: #fafafa;
         }
 
+        .quad-item {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            padding: 4px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .token-output {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+
         @media (max-width: 768px) {
             .flex {
                 flex-direction: column;
@@ -129,11 +152,11 @@
 <body class="bg-gray-50">
     <div class="flex h-screen">
         <!-- 侧边栏导航 -->
-        <aside class="w-64 bg-white shadow-lg z-10">
+        <aside class="w-64 bg-white shadow-lg z-10 overflow-y-auto">
             <div class="p-6 border-b">
                 <h1 class="text-xl font-bold text-blue-600">编译原理实验平台</h1>
                 <p class="text-sm text-gray-500 mt-1">Compiler Lab</p>
-                <p class="text-xs text-gray-400 mt-1">C/C++ 实现</p>
+                <p class="text-xs text-gray-400 mt-1">C/C++ 实现 | 六个实验</p>
             </div>
             <nav class="p-4">
                 <div class="space-y-2">
@@ -152,6 +175,15 @@
                     <div class="nav-item" data-page="exp3">
                         <span class="text-gray-700">🔍 实验三：LR(0)项目集</span>
                     </div>
+                    <div class="nav-item" data-page="exp4">
+                        <span class="text-gray-700">⚙️ 实验四：SLR(1)文法</span>
+                    </div>
+                    <div class="nav-item" data-page="exp5">
+                        <span class="text-gray-700">📊 实验五：语义分析</span>
+                    </div>
+                    <div class="nav-item" data-page="exp6">
+                        <span class="text-gray-700">💻 实验六：中间代码生成</span>
+                    </div>
                     <div class="nav-item" data-page="about">
                         <span class="text-gray-700">📖 关于</span>
                     </div>
@@ -165,12 +197,52 @@
             <div id="page-home" class="page-content active">
                 <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg text-white p-8 mb-6">
                     <h1 class="text-3xl font-bold">编译原理实验平台</h1>
-                    <p class="mt-2 opacity-90">实验一：DFA模拟器 | 实验二：词法分析器 | 实验三：LR(0)项目集规范族</p>
+                    <p class="mt-2 opacity-90">实验一至六完整实现 | DFA模拟器 | 词法分析器 | LR(0)项目集 | SLR(1)文法 | 语义分析 | 中间代码生成</p>
                     <p class="mt-1 text-sm opacity-75">基于 C/C++ 实现，前端可视化展示核心功能</p>
                 </div>
 
+                <!-- 实验卡片网格 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
+                        <h2 class="text-xl font-semibold mb-2">📐 实验一</h2>
+                        <p class="text-gray-600 text-sm">DFA模拟器：加载五元组配置，支持合法性检查、枚举接受字符串、字符串识别。</p>
+                        <p class="text-xs text-gray-400 mt-2">experiment1/dfa.cpp | dfa_in_1.txt</p>
+                        <button class="go-to-exp1 mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm">进入实验一</button>
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6 border-l-4 border-green-500">
+                        <h2 class="text-xl font-semibold mb-2">🔡 实验二</h2>
+                        <p class="text-gray-600 text-sm">词法分析器：识别标识符、整数、浮点数、运算符，输出Token流。</p>
+                        <p class="text-xs text-gray-400 mt-2">experiment2/scanner.c | dfa.txt | test.src</p>
+                        <button class="go-to-exp2 mt-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm">进入实验二</button>
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6 border-l-4 border-purple-500">
+                        <h2 class="text-xl font-semibold mb-2">🔍 实验三</h2>
+                        <p class="text-gray-600 text-sm">LR(0)项目集规范族：加载文法，生成项目集、GOTO图、检测冲突。</p>
+                        <p class="text-xs text-gray-400 mt-2">experiment3/lr0.c | grammer.txt</p>
+                        <button class="go-to-exp3 mt-4 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 text-sm">进入实验三</button>
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6 border-l-4 border-orange-500">
+                        <h2 class="text-xl font-semibold mb-2">⚙️ 实验四</h2>
+                        <p class="text-gray-600 text-sm">SLR(1)文法分析：构建SLR分析表，支持FIRST/FOLLOW集计算和语法分析。</p>
+                        <p class="text-xs text-gray-400 mt-2">experiment4/slr1.c | grammer.txt</p>
+                        <button class="go-to-exp4 mt-4 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 text-sm">进入实验四</button>
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6 border-l-4 border-red-500">
+                        <h2 class="text-xl font-semibold mb-2">📊 实验五</h2>
+                        <p class="text-gray-600 text-sm">语义分析：符号表管理、类型检查、抽象语法树(AST)构建。</p>
+                        <p class="text-xs text-gray-400 mt-2">experiment5/experiment5.c | test.c</p>
+                        <button class="go-to-exp5 mt-4 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm">进入实验五</button>
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6 border-l-4 border-teal-500">
+                        <h2 class="text-xl font-semibold mb-2">💻 实验六</h2>
+                        <p class="text-gray-600 text-sm">中间代码生成：三地址码/四元式生成，支持表达式、控制流、函数调用。</p>
+                        <p class="text-xs text-gray-400 mt-2">experiment6/experiment6.c | test.c</p>
+                        <button class="go-to-exp6 mt-4 px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 text-sm">进入实验六</button>
+                    </div>
+                </div>
+
                 <!-- 项目架构展示 -->
-                <div class="bg-white rounded-lg shadow p-6 mb-6">
+                <div class="bg-white rounded-lg shadow p-6 mt-6">
                     <h2 class="text-xl font-semibold mb-4">📁 项目架构</h2>
                     <pre class="bg-gray-800 text-green-400 p-4 rounded-lg text-sm overflow-x-auto" style="font-family: monospace;">
 compiler-lab/
@@ -192,36 +264,23 @@ compiler-lab/
 │   ├── lr0.c                           # LR(0)核心实现 (C)
 │   └── grammer.txt                     # 文法规则文件
 │
+├── experiment4/                        # 实验四：SLR(1)文法分析
+│   ├── slr1.c                          # SLR(1)核心实现 (C)
+│   └── grammer.txt                     # 文法规则文件
+│
+├── experiment5/                        # 实验五：语义分析
+│   ├── experiment5.c                   # 语义分析实现 (C)
+│   └── test.c                          # 测试源代码
+│
+├── experiment6/                        # 实验六：中间代码生成
+│   ├── experiment6.c                   # 中间代码生成实现 (C)
+│   └── test.c                          # 测试源代码
+│
 └── README.md                           # 项目说明文档</pre>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-white rounded-lg shadow p-6">
-                        <h2 class="text-xl font-semibold mb-4">📐 实验一</h2>
-                        <p class="text-gray-600">DFA模拟器：加载 dfa_in_1.txt，支持合法性检查、枚举接受字符串、字符串识别。</p>
-                        <p class="text-sm text-gray-400 mt-2">📄 experiment1/dfa.cpp</p>
-                        <p class="text-sm text-gray-400">📄 experiment1/dfa_in_1.txt</p>
-                        <button class="go-to-exp1 mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">进入实验一</button>
-                    </div>
-                    <div class="bg-white rounded-lg shadow p-6">
-                        <h2 class="text-xl font-semibold mb-4">🔡 实验二</h2>
-                        <p class="text-gray-600">词法分析器：加载 dfa.txt，识别 ID、INT、FLOAT、运算符，输出 Token 流。</p>
-                        <p class="text-sm text-gray-400 mt-2">📄 experiment2/scanner.c</p>
-                        <p class="text-sm text-gray-400">📄 experiment2/dfa.txt</p>
-                        <p class="text-sm text-gray-400">📄 experiment2/test.src</p>
-                        <button class="go-to-exp2 mt-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">进入实验二</button>
-                    </div>
-                    <div class="bg-white rounded-lg shadow p-6">
-                        <h2 class="text-xl font-semibold mb-4">🔍 实验三</h2>
-                        <p class="text-gray-600">LR(0)项目集规范族：加载 grammer.txt，生成项目集、GOTO图、检测冲突。</p>
-                        <p class="text-sm text-gray-400 mt-2">📄 experiment3/lr0.c</p>
-                        <p class="text-sm text-gray-400">📄 experiment3/grammer.txt</p>
-                        <button class="go-to-exp3 mt-4 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600">进入实验三</button>
-                    </div>
                 </div>
             </div>
 
-            <!-- 实验一：DFA模拟器 -->
+            <!-- 实验一：DFA模拟器 (保持不变) -->
             <div id="page-exp1" class="page-content">
                 <div class="bg-white rounded-lg shadow p-6">
                     <h1 class="text-2xl font-bold mb-2">实验一：DFA 模拟器</h1>
@@ -295,7 +354,7 @@ compiler-lab/
                 </div>
             </div>
 
-            <!-- 实验二：词法分析器 -->
+            <!-- 实验二：词法分析器 (保持不变) -->
             <div id="page-exp2" class="page-content">
                 <div class="bg-white rounded-lg shadow p-6">
                     <h1 class="text-2xl font-bold mb-2">实验二：词法分析器 (Scanner)</h1>
@@ -333,7 +392,7 @@ b = b - 2;</textarea>
                 </div>
             </div>
 
-            <!-- 实验三：LR(0)项目集 -->
+            <!-- 实验三：LR(0)项目集 (保持不变) -->
             <div id="page-exp3" class="page-content">
                 <div class="bg-white rounded-lg shadow p-6">
                     <h1 class="text-2xl font-bold mb-2">实验三：LR(0) 项目集规范族</h1>
@@ -385,6 +444,178 @@ F -> id</textarea>
                 </div>
             </div>
 
+            <!-- 实验四：SLR(1)文法分析 -->
+            <div id="page-exp4" class="page-content">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h1 class="text-2xl font-bold mb-2">实验四：SLR(1) 文法分析</h1>
+                    <p class="text-gray-600 mb-4">对应代码：<code class="bg-gray-100 px-2 py-1 rounded">experiment4/slr1.c</code> + <code class="bg-gray-100 px-2 py-1 rounded">experiment4/grammer.txt</code></p>
+                    
+                    <div class="bg-orange-50 border-l-4 border-orange-500 p-3 mb-4 text-sm">
+                        <p class="font-semibold">📌 SLR(1) 文法分析功能</p>
+                        <p class="text-gray-700">构建LR(0)项目集 | 计算FIRST/FOLLOW集 | 构建SLR分析表 | 语法分析演示</p>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">文法规则 (grammer.txt)</label>
+                        <textarea id="slr-grammar-input" rows="8" class="w-full border border-gray-300 rounded-lg p-3 font-mono text-sm"># 算术表达式文法
+E -> E + T
+E -> T
+T -> T * F
+T -> F
+F -> ( E )
+F -> id</textarea>
+                        <div class="flex gap-3 mt-3">
+                            <button id="slr-parse" class="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600">构建SLR分析表</button>
+                            <label class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 cursor-pointer">
+                                上传文件
+                                <input type="file" id="slr-upload" accept=".txt" class="hidden">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="slr-result-area" class="hidden">
+                        <div class="mb-6">
+                            <h2 class="text-lg font-semibold mb-3">📋 产生式列表（含增广文法）</h2>
+                            <div id="slr-productions-list" class="bg-gray-50 rounded-lg p-4 font-mono text-sm"></div>
+                        </div>
+                        <div class="mb-6">
+                            <h2 class="text-lg font-semibold mb-3">🔍 FIRST 集</h2>
+                            <div id="first-sets" class="bg-gray-50 rounded-lg p-4 font-mono text-sm"></div>
+                        </div>
+                        <div class="mb-6">
+                            <h2 class="text-lg font-semibold mb-3">📖 FOLLOW 集</h2>
+                            <div id="follow-sets" class="bg-gray-50 rounded-lg p-4 font-mono text-sm"></div>
+                        </div>
+                        <div class="mb-6">
+                            <h2 class="text-lg font-semibold mb-3">⚙️ SLR(1) 分析表</h2>
+                            <div id="slr-table" class="bg-gray-50 rounded-lg p-4 font-mono text-sm overflow-x-auto"></div>
+                        </div>
+                        <div class="mb-6">
+                            <h2 class="text-lg font-semibold mb-3">🎨 GOTO 图</h2>
+                            <div id="slr-graph-container" class="border border-gray-200 rounded-lg bg-white" style="height: 450px;"></div>
+                        </div>
+                        <div class="mb-6">
+                            <h2 class="text-lg font-semibold mb-3">💬 语法分析演示</h2>
+                            <div class="flex gap-3 mb-3">
+                                <input type="text" id="slr-input-string" placeholder="输入字符串 (如: id + id * id)" class="border border-gray-300 rounded-lg p-2 flex-1 font-mono">
+                                <button id="slr-parse-string" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">语法分析</button>
+                            </div>
+                            <div id="slr-parse-result" class="p-3 bg-gray-50 rounded-lg font-mono text-sm overflow-x-auto" style="max-height: 300px; overflow-y: auto;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 实验五：语义分析 -->
+            <div id="page-exp5" class="page-content">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h1 class="text-2xl font-bold mb-2">实验五：语义分析</h1>
+                    <p class="text-gray-600 mb-4">对应代码：<code class="bg-gray-100 px-2 py-1 rounded">experiment5/experiment5.c</code> + <code class="bg-gray-100 px-2 py-1 rounded">experiment5/test.c</code></p>
+                    
+                    <div class="bg-red-50 border-l-4 border-red-500 p-3 mb-4 text-sm">
+                        <p class="font-semibold">📌 语义分析功能</p>
+                        <p class="text-gray-700">符号表管理 | 类型检查 | 作用域处理 | 抽象语法树(AST)构建</p>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">源代码输入 (test.c)</label>
+                        <textarea id="semantic-input" rows="12" class="w-full border border-gray-300 rounded-lg p-3 font-mono text-sm">int x;
+int y;
+float z;
+
+x = 10;
+y = 20;
+z = x + y;
+
+if (x > 5) {
+    x = x - 5;
+}
+
+while (x < 100) {
+    x = x + 10;
+}</textarea>
+                        <div class="flex gap-3 mt-3">
+                            <button id="semantic-analyze" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">语义分析</button>
+                            <label class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 cursor-pointer">
+                                上传文件
+                                <input type="file" id="semantic-upload" accept=".c,.txt" class="hidden">
+                            </label>
+                            <button id="semantic-clear" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">清空</button>
+                        </div>
+                    </div>
+
+                    <div id="semantic-result-area" class="hidden">
+                        <div class="mb-6">
+                            <h2 class="text-lg font-semibold mb-3">📋 符号表</h2>
+                            <div id="symbol-table" class="bg-gray-900 text-green-400 rounded-lg p-4 font-mono text-sm overflow-x-auto" style="max-height: 300px; overflow-y: auto;"></div>
+                        </div>
+                        <div class="mb-6">
+                            <h2 class="text-lg font-semibold mb-3">🌲 抽象语法树 (AST)</h2>
+                            <div id="ast-output" class="bg-gray-800 text-yellow-300 rounded-lg p-4 font-mono text-sm overflow-x-auto" style="max-height: 400px; overflow-y: auto;"></div>
+                        </div>
+                        <div class="mb-6">
+                            <h2 class="text-lg font-semibold mb-3">✅ 分析结果</h2>
+                            <div id="semantic-result" class="rounded-lg p-4"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 实验六：中间代码生成 -->
+            <div id="page-exp6" class="page-content">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h1 class="text-2xl font-bold mb-2">实验六：中间代码生成</h1>
+                    <p class="text-gray-600 mb-4">对应代码：<code class="bg-gray-100 px-2 py-1 rounded">experiment6/experiment6.c</code> + <code class="bg-gray-100 px-2 py-1 rounded">experiment6/test.c</code></p>
+                    
+                    <div class="bg-teal-50 border-l-4 border-teal-500 p-3 mb-4 text-sm">
+                        <p class="font-semibold">📌 中间代码生成功能</p>
+                        <p class="text-gray-700">三地址码 | 四元式 | 表达式计算 | 控制流处理 | 函数调用</p>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">源代码输入 (test.c)</label>
+                        <textarea id="icode-input" rows="12" class="w-full border border-gray-300 rounded-lg p-3 font-mono text-sm">int x;
+int y;
+float z;
+
+x = 10;
+y = 20;
+z = x + y;
+
+if (x > 5) {
+    x = x - 5;
+}
+
+while (x < 100) {
+    x = x + 10;
+}</textarea>
+                        <div class="flex gap-3 mt-3">
+                            <button id="icode-generate" class="px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600">生成中间代码</button>
+                            <label class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 cursor-pointer">
+                                上传文件
+                                <input type="file" id="icode-upload" accept=".c,.txt" class="hidden">
+                            </label>
+                            <button id="icode-clear" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">清空</button>
+                        </div>
+                    </div>
+
+                    <div id="icode-result-area" class="hidden">
+                        <div class="mb-6">
+                            <h2 class="text-lg font-semibold mb-3">📊 四元式 (Quadruples)</h2>
+                            <div id="quadruples-output" class="bg-gray-900 text-green-400 rounded-lg p-4 font-mono text-sm overflow-x-auto" style="max-height: 300px; overflow-y: auto;"></div>
+                        </div>
+                        <div class="mb-6">
+                            <h2 class="text-lg font-semibold mb-3">📝 三地址码 (Three-Address Code)</h2>
+                            <div id="tac-output" class="bg-gray-800 text-yellow-300 rounded-lg p-4 font-mono text-sm overflow-x-auto" style="max-height: 300px; overflow-y: auto;"></div>
+                        </div>
+                        <div class="mb-6">
+                            <h2 class="text-lg font-semibold mb-3">✅ 生成结果</h2>
+                            <div id="icode-result" class="rounded-lg p-4"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- 关于页面 -->
             <div id="page-about" class="page-content">
                 <div class="bg-white rounded-lg shadow p-6">
@@ -412,39 +643,83 @@ compiler-lab/
 │   ├── lr0.c                           # LR(0)核心实现 (C)
 │   └── grammer.txt                     # 文法规则文件
 │
+├── experiment4/                        # 实验四：SLR(1)文法分析
+│   ├── slr1.c                          # SLR(1)核心实现 (C)
+│   └── grammer.txt                     # 文法规则文件
+│
+├── experiment5/                        # 实验五：语义分析
+│   ├── experiment5.c                   # 语义分析实现 (C)
+│   └── test.c                          # 测试源代码
+│
+├── experiment6/                        # 实验六：中间代码生成
+│   ├── experiment6.c                   # 中间代码生成实现 (C)
+│   └── test.c                          # 测试源代码
+│
 └── README.md                           # 项目说明文档</pre>
                     </div>
 
-                    <div class="border-t pt-4 mt-4">
-                        <h2 class="font-semibold mb-2">📐 实验一 (experiment1/dfa.cpp)</h2>
-                        <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4">
-                            <li>加载 experiment1/dfa_in_1.txt 五元组配置</li>
-                            <li>DFA合法性检查：开始状态、接受状态、转换表完整性</li>
-                            <li>枚举长度≤N的所有接受字符串 (BFS)</li>
-                            <li>判断输入字符串是否被接受</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="border-t pt-4 mt-4">
-                        <h2 class="font-semibold mb-2">🔡 实验二 (experiment2/scanner.c)</h2>
-                        <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4">
-                            <li>加载 experiment2/dfa.txt 词法规则</li>
-                            <li>识别标识符(ID)、整型常量(INT)、浮点常量(FLOAT)</li>
-                            <li>识别运算符: = + - ; .</li>
-                            <li>输出格式: (Token类型, 原始单词)</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="border-t pt-4 mt-4">
-                        <h2 class="font-semibold mb-2">🔍 实验三 (experiment3/lr0.c)</h2>
-                        <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4">
-                            <li>加载 experiment3/grammer.txt 文法规则</li>
-                            <li>增广文法 (添加 S' → S)</li>
-                            <li>计算闭包(Closure)和Goto转移</li>
-                            <li>生成LR(0)项目集规范族</li>
-                            <li>检测移进-归约和归约-归约冲突</li>
-                            <li>输出GOTO图</li>
-                        </ul>
+                    <div class="space-y-4">
+                        <div class="border-t pt-4">
+                            <h2 class="font-semibold mb-2">📐 实验一 (experiment1/dfa.cpp)</h2>
+                            <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4">
+                                <li>加载 experiment1/dfa_in_1.txt 五元组配置</li>
+                                <li>DFA合法性检查：开始状态、接受状态、转换表完整性</li>
+                                <li>枚举长度≤N的所有接受字符串 (BFS)</li>
+                                <li>判断输入字符串是否被接受</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="border-t pt-4">
+                            <h2 class="font-semibold mb-2">🔡 实验二 (experiment2/scanner.c)</h2>
+                            <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4">
+                                <li>加载 experiment2/dfa.txt 词法规则</li>
+                                <li>识别标识符(ID)、整型常量(INT)、浮点常量(FLOAT)</li>
+                                <li>识别运算符: = + - ; .</li>
+                                <li>输出格式: (Token类型, 原始单词)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="border-t pt-4">
+                            <h2 class="font-semibold mb-2">🔍 实验三 (experiment3/lr0.c)</h2>
+                            <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4">
+                                <li>加载 experiment3/grammer.txt 文法规则</li>
+                                <li>增广文法 (添加 S' → S)</li>
+                                <li>计算闭包(Closure)和Goto转移</li>
+                                <li>生成LR(0)项目集规范族</li>
+                                <li>检测移进-归约和归约-归约冲突</li>
+                            </ul>
+                        </div>
+
+                        <div class="border-t pt-4">
+                            <h2 class="font-semibold mb-2">⚙️ 实验四 (experiment4/slr1.c)</h2>
+                            <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4">
+                                <li>加载 experiment4/grammer.txt 文法规则</li>
+                                <li>构建LR(0)项目集规范族</li>
+                                <li>计算FIRST和FOLLOW集</li>
+                                <li>构建SLR(1)分析表</li>
+                                <li>语法分析演示</li>
+                            </ul>
+                        </div>
+
+                        <div class="border-t pt-4">
+                            <h2 class="font-semibold mb-2">📊 实验五 (experiment5/experiment5.c)</h2>
+                            <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4">
+                                <li>词法分析和语法分析</li>
+                                <li>符号表管理（支持作用域）</li>
+                                <li>类型检查（变量声明、赋值类型匹配）</li>
+                                <li>抽象语法树(AST)构建</li>
+                            </ul>
+                        </div>
+
+                        <div class="border-t pt-4">
+                            <h2 class="font-semibold mb-2">💻 实验六 (experiment6/experiment6.c)</h2>
+                            <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4">
+                                <li>中间代码生成（四元式/三地址码）</li>
+                                <li>支持表达式、赋值语句</li>
+                                <li>支持if-else、while控制流</li>
+                                <li>函数调用和参数传递</li>
+                            </ul>
+                        </div>
                     </div>
                     
                     <div class="border-t pt-4 mt-4">
@@ -489,15 +764,12 @@ compiler-lab/
                 });
             });
             
-            document.querySelectorAll('.go-to-exp1').forEach(btn => {
-                btn.addEventListener('click', () => switchPage('exp1'));
-            });
-            document.querySelectorAll('.go-to-exp2').forEach(btn => {
-                btn.addEventListener('click', () => switchPage('exp2'));
-            });
-            document.querySelectorAll('.go-to-exp3').forEach(btn => {
-                btn.addEventListener('click', () => switchPage('exp3'));
-            });
+            document.querySelectorAll('.go-to-exp1').forEach(btn => btn.addEventListener('click', () => switchPage('exp1')));
+            document.querySelectorAll('.go-to-exp2').forEach(btn => btn.addEventListener('click', () => switchPage('exp2')));
+            document.querySelectorAll('.go-to-exp3').forEach(btn => btn.addEventListener('click', () => switchPage('exp3')));
+            document.querySelectorAll('.go-to-exp4').forEach(btn => btn.addEventListener('click', () => switchPage('exp4')));
+            document.querySelectorAll('.go-to-exp5').forEach(btn => btn.addEventListener('click', () => switchPage('exp5')));
+            document.querySelectorAll('.go-to-exp6').forEach(btn => btn.addEventListener('click', () => switchPage('exp6')));
         });
 
         // ==================== 实验一：DFA模拟器 ====================
@@ -511,12 +783,8 @@ compiler-lab/
             
             for (let line of lines) {
                 line = line.trim();
-                if (line === '===') {
-                    section++;
-                    continue;
-                }
+                if (line === '===') { section++; continue; }
                 if (line === '' || line.startsWith('#')) continue;
-                
                 switch(section) {
                     case 0: alphabet = line; break;
                     case 1: states = line; break;
@@ -535,25 +803,14 @@ compiler-lab/
             const transLines = transitions.split('\n');
             for (let line of transLines) {
                 const parts = line.trim().split(/\s+/);
-                if (parts.length >= 3) {
-                    transMap.set(`${parts[0]},${parts[1]}`, parts[2]);
-                }
+                if (parts.length >= 3) transMap.set(`${parts[0]},${parts[1]}`, parts[2]);
             }
             
-            // 验证
             const errors = [];
             if (!stateSet.has(startState)) errors.push('开始状态不在状态集中');
             if (acceptSet.size === 0) errors.push('接受状态集为空');
-            for (let s of acceptSet) {
-                if (!stateSet.has(s)) errors.push(`接受状态 ${s} 不在状态集中`);
-            }
-            for (let s of stateSet) {
-                for (let c of alphabetSet) {
-                    if (!transMap.has(`${s},${c}`)) {
-                        errors.push(`状态 ${s} 在字符 '${c}' 上缺少转换`);
-                    }
-                }
-            }
+            for (let s of acceptSet) if (!stateSet.has(s)) errors.push(`接受状态 ${s} 不在状态集中`);
+            for (let s of stateSet) for (let c of alphabetSet) if (!transMap.has(`${s},${c}`)) errors.push(`状态 ${s} 在字符 '${c}' 上缺少转换`);
             
             return { valid: errors.length === 0, errors, alphabetSet, stateSet, startState, acceptSet, transMap };
         }
@@ -562,44 +819,32 @@ compiler-lab/
             const result = [];
             const queue = [{ state: dfa.startState, str: '' }];
             const visited = new Set();
-            
             while (queue.length > 0) {
                 const { state, str } = queue.shift();
                 const key = `${state},${str}`;
                 if (visited.has(key)) continue;
                 visited.add(key);
-                
-                if (str.length <= N && dfa.acceptSet.has(state)) {
-                    result.push(str);
-                }
-                
+                if (str.length <= N && dfa.acceptSet.has(state)) result.push(str);
                 if (str.length < N) {
                     for (let c of dfa.alphabetSet) {
                         const nextState = dfa.transMap.get(`${state},${c}`);
-                        if (nextState) {
-                            queue.push({ state: nextState, str: str + c });
-                        }
+                        if (nextState) queue.push({ state: nextState, str: str + c });
                     }
                 }
             }
-            
             return [...new Set(result)].sort((a,b) => a.length - b.length);
         }
 
         function testString(dfa, input) {
             let currentState = dfa.startState;
             const path = [currentState];
-            
             for (let i = 0; i < input.length; i++) {
                 const c = input[i];
                 const nextState = dfa.transMap.get(`${currentState},${c}`);
-                if (!nextState) {
-                    return { accepted: false, path, reason: `无转换: δ(${currentState}, ${c}) 未定义` };
-                }
+                if (!nextState) return { accepted: false, path, reason: `无转换: δ(${currentState}, ${c}) 未定义` };
                 currentState = nextState;
                 path.push(currentState);
             }
-            
             const accepted = dfa.acceptSet.has(currentState);
             return { accepted, path, reason: accepted ? `到达接受状态 ${currentState}` : `最终状态 ${currentState} 不是接受状态` };
         }
@@ -607,7 +852,6 @@ compiler-lab/
         function renderDFAGraph(dfa) {
             const nodes = [];
             const edges = [];
-            
             for (let state of dfa.stateSet) {
                 const isAccept = dfa.acceptSet.has(state);
                 const isStart = state === dfa.startState;
@@ -618,20 +862,14 @@ compiler-lab/
                     color: isAccept ? { background: '#a5f3c3', border: '#059669' } : { background: '#e0e7ff', border: '#6366f1' }
                 });
             }
-            
             for (let [key, to] of dfa.transMap) {
                 const [from, char] = key.split(',');
                 edges.push({ from, to, label: char, arrows: 'to', font: { size: 12 } });
             }
-            
             const container = document.getElementById('dfa-graph-container');
             if (container) {
                 const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
-                const options = {
-                    nodes: { shape: 'circle', size: 35, font: { size: 14 }, borderWidth: 2 },
-                    edges: { arrows: 'to', smooth: { type: 'curvedCW' }, font: { size: 12 } },
-                    physics: { enabled: true }
-                };
+                const options = { nodes: { shape: 'circle', size: 35, font: { size: 14 }, borderWidth: 2 }, edges: { arrows: 'to', smooth: { type: 'curvedCW' }, font: { size: 12 } }, physics: { enabled: true } };
                 if (dfaGraph) dfaGraph.destroy();
                 dfaGraph = new vis.Network(container, data, options);
             }
@@ -642,7 +880,6 @@ compiler-lab/
             const result = parseDFA(config);
             const validationDiv = document.getElementById('dfa-validation');
             const validationContent = document.getElementById('dfa-validation-content');
-            
             if (result.valid) {
                 currentDFA = result;
                 validationContent.innerHTML = '<div class="conflict-success">✅ DFA合法性检查通过！</div>';
@@ -662,11 +899,8 @@ compiler-lab/
             if (isNaN(N) || N < 0) { alert('请输入有效的N值'); return; }
             const strings = enumerateStrings(currentDFA, N);
             const resultDiv = document.getElementById('dfa-strings-result');
-            if (strings.length === 0) {
-                resultDiv.innerHTML = '<span class="text-gray-500">没有找到接受字符串</span>';
-            } else {
-                resultDiv.innerHTML = `<span class="text-gray-700">共 ${strings.length} 个字符串:</span><br><span class="text-blue-600">${strings.map(s => s === '' ? 'ε' : s).join(', ')}</span>`;
-            }
+            if (strings.length === 0) resultDiv.innerHTML = '<span class="text-gray-500">没有找到接受字符串</span>';
+            else resultDiv.innerHTML = `<span class="text-gray-700">共 ${strings.length} 个字符串:</span><br><span class="text-blue-600">${strings.map(s => s === '' ? 'ε' : s).join(', ')}</span>`;
         });
 
         document.getElementById('dfa-test')?.addEventListener('click', function() {
@@ -674,11 +908,8 @@ compiler-lab/
             const testStr = document.getElementById('dfa-test-string').value;
             const result = testString(currentDFA, testStr);
             const resultDiv = document.getElementById('dfa-test-result');
-            if (result.accepted) {
-                resultDiv.innerHTML = `<div class="conflict-success">✅ 字符串 "${testStr}" 被接受<br>路径: ${result.path.join(' → ')}<br>${result.reason}</div>`;
-            } else {
-                resultDiv.innerHTML = `<div class="conflict-warning">❌ 字符串 "${testStr}" 被拒绝<br>路径: ${result.path.join(' → ')}<br>${result.reason}</div>`;
-            }
+            if (result.accepted) resultDiv.innerHTML = `<div class="conflict-success">✅ 字符串 "${testStr}" 被接受<br>路径: ${result.path.join(' → ')}<br>${result.reason}</div>`;
+            else resultDiv.innerHTML = `<div class="conflict-warning">❌ 字符串 "${testStr}" 被拒绝<br>路径: ${result.path.join(' → ')}<br>${result.reason}</div>`;
         });
 
         document.getElementById('dfa-upload')?.addEventListener('change', function(e) {
@@ -692,13 +923,11 @@ compiler-lab/
             }
         });
 
-        // 默认加载
         setTimeout(() => { document.getElementById('dfa-load')?.click(); }, 100);
 
         // ==================== 实验二：词法分析器 ====================
         const TokenType = { ID: 'ID', INT: 'INT', FLOAT: 'FLOAT', SCO: 'SCO', ASSIGN: 'ASSIGN', PLUS: 'PLUS', MINUS: 'MINUS', DOT: 'DOT', ERROR: 'ERROR' };
-        const tokenNames = { ID: 'ID', INT: 'INT', FLOAT: 'FLOAT', SCO: 'SCO', ASSIGN: 'ASSIGN', PLUS: 'PLUS', MINUS: 'MINUS', DOT: 'DOT', ERROR: 'ERROR' };
-
+        
         function isLetter(c) { return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'); }
         function isDigit(c) { return c >= '0' && c <= '9'; }
         function isWhitespace(c) { return c === ' ' || c === '\t' || c === '\n' || c === '\r'; }
@@ -707,9 +936,7 @@ compiler-lab/
             const len = token.length;
             if (len === 0) return TokenType.ERROR;
             if (isLetter(token[0])) {
-                for (let i = 1; i < len; i++) {
-                    if (!isLetter(token[i]) && !isDigit(token[i])) return TokenType.ERROR;
-                }
+                for (let i = 1; i < len; i++) if (!isLetter(token[i]) && !isDigit(token[i])) return TokenType.ERROR;
                 return TokenType.ID;
             }
             let i = 0;
@@ -747,9 +974,7 @@ compiler-lab/
             if (pos >= len) return { token: null, type: null, newPos: pos };
             const start = pos;
             const c = input[start];
-            if (c === ';' || c === '=' || c === '+' || c === '-' || c === '.') {
-                return { token: c, type: getTokenType(c), newPos: pos + 1 };
-            }
+            if (c === ';' || c === '=' || c === '+' || c === '-' || c === '.') return { token: c, type: getTokenType(c), newPos: pos + 1 };
             if (isLetter(c)) {
                 while (pos < len && (isLetter(input[pos]) || isDigit(input[pos]))) pos++;
                 const token = input.substring(start, pos);
@@ -798,8 +1023,7 @@ compiler-lab/
         document.getElementById('scanner-parse')?.addEventListener('click', function() {
             const input = document.getElementById('scanner-input').value;
             const tokens = lexicalAnalysis(input);
-            const outputDiv = document.getElementById('scanner-output');
-            outputDiv.innerHTML = renderScannerTokens(tokens);
+            document.getElementById('scanner-output').innerHTML = renderScannerTokens(tokens);
             document.getElementById('scanner-result-area').classList.remove('hidden');
         });
 
@@ -825,38 +1049,18 @@ compiler-lab/
         let lr0ItemSets = [];
         let lr0Graph = null;
 
-        class Production {
-            constructor(left, right) { this.left = left; this.right = right; this.rightLen = right.length; }
-        }
-
-        class Item {
-            constructor(prodId, dotPos) { this.prodId = prodId; this.dotPos = dotPos; }
+        class Production { constructor(left, right) { this.left = left; this.right = right; this.rightLen = right.length; } }
+        class Item { constructor(prodId, dotPos) { this.prodId = prodId; this.dotPos = dotPos; }
             equals(other) { return this.prodId === other.prodId && this.dotPos === other.dotPos; }
-            toString(prods) {
-                const prod = prods[this.prodId];
-                let result = prod.left + " -> ";
-                for (let i = 0; i < prod.rightLen; i++) {
-                    if (i === this.dotPos) result += "·";
-                    result += prod.right[i];
-                    if (i < prod.rightLen - 1) result += " ";
-                }
-                if (this.dotPos === prod.rightLen) result += "·";
-                return result;
-            }
+            toString(prods) { const prod = prods[this.prodId]; let result = prod.left + " -> "; for (let i = 0; i < prod.rightLen; i++) { if (i === this.dotPos) result += "·"; result += prod.right[i]; if (i < prod.rightLen - 1) result += " "; } if (this.dotPos === prod.rightLen) result += "·"; return result; }
         }
-
-        class ItemSet {
-            constructor(id) { this.id = id; this.items = []; this.transitions = {}; }
+        class ItemSet { constructor(id) { this.id = id; this.items = []; this.transitions = {}; }
             addItem(item) { if (!this.hasItem(item)) { this.items.push(item); return true; } return false; }
             hasItem(item) { return this.items.some(i => i.equals(item)); }
-            equals(other) {
-                if (this.items.length !== other.items.length) return false;
-                for (let item of this.items) if (!other.hasItem(item)) return false;
-                return true;
-            }
+            equals(other) { if (this.items.length !== other.items.length) return false; for (let item of this.items) if (!other.hasItem(item)) return false; return true; }
         }
 
-        function parseGrammar(grammarStr) {
+        function parseGrammarLR0(grammarStr) {
             const productions = [];
             const lines = grammarStr.split('\n');
             for (let line of lines) {
@@ -870,29 +1074,21 @@ compiler-lab/
                 for (let right of rights) {
                     right = right.trim();
                     const rightSymbols = right.split(/\s+/).filter(s => s !== '');
-                    if (rightSymbols.length > 0) {
-                        productions.push(new Production(left, rightSymbols));
-                    }
+                    if (rightSymbols.length > 0) productions.push(new Production(left, rightSymbols));
                 }
             }
             return productions;
         }
 
         function isTerminal(symbol) {
-            if (symbol.length === 1) {
-                const c = symbol[0];
-                if (c === '+' || c === '-' || c === '*' || c === '/' || c === '(' || c === ')' || c === ';' || c === '=') return true;
-            }
+            if (symbol.length === 1) { const c = symbol[0]; if (c === '+' || c === '-' || c === '*' || c === '/' || c === '(' || c === ')' || c === ';' || c === '=') return true; }
             if (symbol === 'id') return true;
             return !(symbol[0] >= 'A' && symbol[0] <= 'Z');
         }
 
         function getSymbols(productions) {
             const symbols = new Set();
-            for (let prod of productions) {
-                symbols.add(prod.left);
-                for (let sym of prod.right) symbols.add(sym);
-            }
+            for (let prod of productions) { symbols.add(prod.left); for (let sym of prod.right) symbols.add(sym); }
             return Array.from(symbols);
         }
 
@@ -922,18 +1118,14 @@ compiler-lab/
             const newSet = new ItemSet(-1);
             for (let item of itemSet.items) {
                 const prod = productions[item.prodId];
-                if (item.dotPos < prod.rightLen && prod.right[item.dotPos] === symbol) {
-                    newSet.addItem(new Item(item.prodId, item.dotPos + 1));
-                }
+                if (item.dotPos < prod.rightLen && prod.right[item.dotPos] === symbol) newSet.addItem(new Item(item.prodId, item.dotPos + 1));
             }
             if (newSet.items.length > 0) closure(newSet, productions, prodCount);
             return newSet;
         }
 
         function findItemSet(sets, target) {
-            for (let i = 0; i < sets.length; i++) {
-                if (sets[i].equals(target)) return i;
-            }
+            for (let i = 0; i < sets.length; i++) if (sets[i].equals(target)) return i;
             return -1;
         }
 
@@ -943,11 +1135,9 @@ compiler-lab/
             const augmentedLeft = startSymbol + "'";
             productions.push(new Production(augmentedLeft, [startSymbol]));
             const newProdCount = productions.length;
-            
             const I0 = new ItemSet(0);
             I0.addItem(new Item(newProdCount - 1, 0));
             closure(I0, productions, newProdCount);
-            
             const itemSets = [I0];
             let changed = true;
             while (changed) {
@@ -975,8 +1165,7 @@ compiler-lab/
         function checkConflicts(itemSets, productions) {
             const conflicts = [];
             for (let set of itemSets) {
-                let reduceCount = 0;
-                let shiftCount = 0;
+                let reduceCount = 0, shiftCount = 0;
                 for (let item of set.items) {
                     const prod = productions[item.prodId];
                     if (item.dotPos === prod.rightLen) reduceCount++;
@@ -991,7 +1180,7 @@ compiler-lab/
             return conflicts;
         }
 
-        function renderProductions(productions) {
+        function renderProductionsLR0(productions) {
             let html = '';
             for (let i = 0; i < productions.length; i++) {
                 const p = productions[i];
@@ -1003,19 +1192,12 @@ compiler-lab/
         function renderItemSets(itemSets, productions) {
             let html = '';
             for (let set of itemSets) {
-                html += `<div class="item-set">`;
-                html += `<div class="item-set-header">I${set.id} (${set.items.length}个项目)</div>`;
-                html += `<div class="item-set-content">`;
-                html += `<ul>`;
-                for (let item of set.items) {
-                    html += `<li>${item.toString(productions)}</li>`;
-                }
+                html += `<div class="item-set"><div class="item-set-header">I${set.id} (${set.items.length}个项目)</div><div class="item-set-content"><ul>`;
+                for (let item of set.items) html += `<li>${item.toString(productions)}</li>`;
                 html += `</ul>`;
                 if (Object.keys(set.transitions).length > 0) {
                     html += `<div class="transition-list">`;
-                    for (let [sym, targetId] of Object.entries(set.transitions)) {
-                        html += `<span class="transition-item">${sym} → I${targetId}</span>`;
-                    }
+                    for (let [sym, targetId] of Object.entries(set.transitions)) html += `<span class="transition-item">${sym} → I${targetId}</span>`;
                     html += `</div>`;
                 }
                 html += `</div></div>`;
@@ -1023,37 +1205,26 @@ compiler-lab/
             return html;
         }
 
-        function renderConflicts(conflicts) {
+        function renderConflictsLR0(conflicts) {
             if (conflicts.length === 0) return '<div class="conflict-success">✅ 无 LR(0) 冲突，该文法是 LR(0) 文法</div>';
             let html = `<div class="conflict-warning">❌ 发现 ${conflicts.length} 处冲突</div>`;
             for (let c of conflicts) {
-                if (c.type === 'shift-reduce') {
-                    html += `<div class="conflict-warning mt-2">⚠️ I${c.setId}: 移进-归约冲突！有 ${c.shiftCount} 个移进项目，${c.reduceCount} 个归约项目</div>`;
-                } else if (c.type === 'reduce-reduce') {
-                    html += `<div class="conflict-warning mt-2">⚠️ I${c.setId}: 归约-归约冲突！有 ${c.count} 个归约项目</div>`;
-                }
+                if (c.type === 'shift-reduce') html += `<div class="conflict-warning mt-2">⚠️ I${c.setId}: 移进-归约冲突！有 ${c.shiftCount} 个移进项目，${c.reduceCount} 个归约项目</div>`;
+                else if (c.type === 'reduce-reduce') html += `<div class="conflict-warning mt-2">⚠️ I${c.setId}: 归约-归约冲突！有 ${c.count} 个归约项目</div>`;
             }
             return html;
         }
 
-        function renderGotoGraph(itemSets) {
-            const nodes = [];
-            const edges = [];
+        function renderGotoGraphLR0(itemSets) {
+            const nodes = [], edges = [];
             for (let set of itemSets) {
-                let isAccept = false;
                 nodes.push({ id: set.id, label: `I${set.id}`, shape: 'circle', color: { background: '#e0e7ff', border: '#6366f1' } });
-                for (let [sym, targetId] of Object.entries(set.transitions)) {
-                    edges.push({ from: set.id, to: targetId, label: sym, arrows: 'to', font: { size: 12 } });
-                }
+                for (let [sym, targetId] of Object.entries(set.transitions)) edges.push({ from: set.id, to: targetId, label: sym, arrows: 'to', font: { size: 12 } });
             }
             const container = document.getElementById('graph-container');
             if (container) {
                 const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
-                const options = {
-                    nodes: { shape: 'circle', size: 35, font: { size: 14 }, borderWidth: 2 },
-                    edges: { arrows: 'to', smooth: { type: 'curvedCW' }, font: { size: 12 } },
-                    physics: { enabled: true }
-                };
+                const options = { nodes: { shape: 'circle', size: 35, font: { size: 14 }, borderWidth: 2 }, edges: { arrows: 'to', smooth: { type: 'curvedCW' }, font: { size: 12 } }, physics: { enabled: true } };
                 if (lr0Graph) lr0Graph.destroy();
                 lr0Graph = new vis.Network(container, data, options);
             }
@@ -1061,16 +1232,15 @@ compiler-lab/
 
         document.getElementById('parse-grammar')?.addEventListener('click', function() {
             const grammarInput = document.getElementById('grammar-input').value;
-            let productions = parseGrammar(grammarInput);
+            let productions = parseGrammarLR0(grammarInput);
             if (productions.length === 0) { alert('无法解析文法'); return; }
             const startSymbol = productions[0].left;
             const { productions: newProds, itemSets } = buildLR0Items(productions, startSymbol);
             const conflicts = checkConflicts(itemSets, newProds);
-            
-            document.getElementById('productions-list').innerHTML = renderProductions(newProds);
+            document.getElementById('productions-list').innerHTML = renderProductionsLR0(newProds);
             document.getElementById('item-sets-list').innerHTML = renderItemSets(itemSets, newProds);
-            document.getElementById('conflict-result').innerHTML = renderConflicts(conflicts);
-            renderGotoGraph(itemSets);
+            document.getElementById('conflict-result').innerHTML = renderConflictsLR0(conflicts);
+            renderGotoGraphLR0(itemSets);
             document.getElementById('lr0-result-area').classList.remove('hidden');
         });
 
@@ -1085,8 +1255,645 @@ compiler-lab/
             }
         });
 
-        // 默认加载实验三
         setTimeout(() => { document.getElementById('parse-grammar')?.click(); }, 200);
+
+        // ==================== 实验四：SLR(1)文法分析 ====================
+        let slrProductions = [];
+        let slrItemSets = [];
+        let slrFirstSets = {};
+        let slrFollowSets = {};
+        let slrActionTable = {};
+        let slrGotoTable = {};
+        let slrGraph = null;
+
+        function parseGrammarSLR(grammarStr) {
+            const productions = [];
+            const lines = grammarStr.split('\n');
+            for (let line of lines) {
+                line = line.trim();
+                if (line === '' || line.startsWith('#')) continue;
+                const arrowIndex = line.indexOf('->');
+                if (arrowIndex === -1) continue;
+                const left = line.substring(0, arrowIndex).trim();
+                let rightPart = line.substring(arrowIndex + 2).trim();
+                const rights = rightPart.split('|');
+                for (let right of rights) {
+                    right = right.trim();
+                    const rightSymbols = right.split(/\s+/).filter(s => s !== '');
+                    if (rightSymbols.length > 0) productions.push(new Production(left, rightSymbols));
+                }
+            }
+            return productions;
+        }
+
+        function computeFirstSets(productions, symbols) {
+            const first = {};
+            for (let sym of symbols) first[sym] = new Set();
+            let changed = true;
+            while (changed) {
+                changed = false;
+                for (let prod of productions) {
+                    const left = prod.left;
+                    for (let sym of prod.right) {
+                        const firstSym = first[sym];
+                        for (let item of firstSym) {
+                            if (!first[left].has(item)) { first[left].add(item); changed = true; }
+                        }
+                        if (!isTerminalSLR(sym)) {
+                            if (!first[sym].has('ε')) break;
+                        } else break;
+                    }
+                    if (prod.right.length === 0 && !first[left].has('ε')) { first[left].add('ε'); changed = true; }
+                }
+            }
+            return first;
+        }
+
+        function isTerminalSLR(symbol) {
+            if (symbol.length === 1) {
+                const c = symbol[0];
+                if (c === '+' || c === '-' || c === '*' || c === '/' || c === '(' || c === ')' || c === '$') return true;
+                if (c >= 'a' && c <= 'z') return true;
+                return false;
+            }
+            if (symbol === 'id') return true;
+            return false;
+        }
+
+        function computeFollowSets(productions, startSymbol, first) {
+            const follow = {};
+            const symbols = new Set();
+            for (let prod of productions) { symbols.add(prod.left); for (let sym of prod.right) symbols.add(sym); }
+            for (let sym of symbols) follow[sym] = new Set();
+            follow[startSymbol].add('$');
+            let changed = true;
+            while (changed) {
+                changed = false;
+                for (let prod of productions) {
+                    const left = prod.left;
+                    for (let i = 0; i < prod.right.length; i++) {
+                        const B = prod.right[i];
+                        if (isTerminalSLR(B)) continue;
+                        const beta = prod.right.slice(i + 1);
+                        let allNullable = true;
+                        for (let sym of beta) {
+                            for (let item of first[sym]) {
+                                if (item !== 'ε' && !follow[B].has(item)) { follow[B].add(item); changed = true; }
+                            }
+                            if (!first[sym].has('ε')) { allNullable = false; break; }
+                        }
+                        if (allNullable || beta.length === 0) {
+                            for (let item of follow[left]) {
+                                if (!follow[B].has(item)) { follow[B].add(item); changed = true; }
+                            }
+                        }
+                    }
+                }
+            }
+            return follow;
+        }
+
+        function buildSLRTable(productions, itemSets, first, follow) {
+            const action = {};
+            const goto = {};
+            for (let set of itemSets) {
+                action[set.id] = {};
+                goto[set.id] = {};
+                for (let item of set.items) {
+                    const prod = productions[item.prodId];
+                    if (item.dotPos < prod.right.length) {
+                        const symbol = prod.right[item.dotPos];
+                        if (isTerminalSLR(symbol)) {
+                            const nextSet = gotoSetSLR(set, symbol, productions, productions.length);
+                            if (nextSet.items.length > 0) {
+                                let nextId = findItemSetSLR(itemSets, nextSet);
+                                if (nextId !== -1) action[set.id][symbol] = `s${nextId}`;
+                            }
+                        }
+                    } else {
+                        if (prod.left === productions[productions.length - 1].left && prod.right.length === 1) {
+                            action[set.id]['$'] = 'acc';
+                        } else {
+                            for (let term of follow[prod.left]) {
+                                if (action[set.id][term]) action[set.id][term] += `/r${item.prodId}`;
+                                else action[set.id][term] = `r${item.prodId}`;
+                            }
+                        }
+                    }
+                }
+                for (let [sym, targetId] of Object.entries(set.transitions)) {
+                    if (!isTerminalSLR(sym)) goto[set.id][sym] = targetId;
+                }
+            }
+            return { action, goto };
+        }
+
+        function gotoSetSLR(itemSet, symbol, productions, prodCount) {
+            const newSet = new ItemSet(-1);
+            for (let item of itemSet.items) {
+                const prod = productions[item.prodId];
+                if (item.dotPos < prod.right.length && prod.right[item.dotPos] === symbol) newSet.addItem(new Item(item.prodId, item.dotPos + 1));
+            }
+            if (newSet.items.length > 0) closure(newSet, productions, prodCount);
+            return newSet;
+        }
+
+        function buildSLRItems(productions, startSymbol) {
+            const prodCount = productions.length;
+            const symbols = getSymbols(productions);
+            const augmentedLeft = startSymbol + "'";
+            productions.push(new Production(augmentedLeft, [startSymbol]));
+            const newProdCount = productions.length;
+            const I0 = new ItemSet(0);
+            I0.addItem(new Item(newProdCount - 1, 0));
+            closure(I0, productions, newProdCount);
+            const itemSets = [I0];
+            let changed = true;
+            while (changed) {
+                changed = false;
+                for (let i = 0; i < itemSets.length; i++) {
+                    const current = itemSets[i];
+                    for (let sym of symbols) {
+                        const next = gotoSetSLR(current, sym, productions, newProdCount);
+                        if (next.items.length > 0) {
+                            let existing = findItemSetSLR(itemSets, next);
+                            if (existing === -1) {
+                                next.id = itemSets.length;
+                                itemSets.push(next);
+                                existing = itemSets.length - 1;
+                                changed = true;
+                            }
+                            current.transitions[sym] = existing;
+                        }
+                    }
+                }
+            }
+            return { productions, itemSets };
+        }
+
+        function findItemSetSLR(sets, target) {
+            for (let i = 0; i < sets.length; i++) if (sets[i].equals(target)) return i;
+            return -1;
+        }
+
+        function renderFirstSets(first) {
+            let html = '';
+            for (let [sym, set] of Object.entries(first)) {
+                if (set.size > 0 && !isTerminalSLR(sym)) {
+                    html += `<div>FIRST(${sym}) = { ${Array.from(set).join(', ')} }</div>`;
+                }
+            }
+            return html;
+        }
+
+        function renderFollowSets(follow) {
+            let html = '';
+            for (let [sym, set] of Object.entries(follow)) {
+                if (set.size > 0 && !isTerminalSLR(sym)) {
+                    html += `<div>FOLLOW(${sym}) = { ${Array.from(set).join(', ')} }</div>`;
+                }
+            }
+            return html;
+        }
+
+        function renderSLRTable(action, goto, itemSets, symbols) {
+            const terminals = symbols.filter(s => isTerminalSLR(s) && s !== '$');
+            terminals.push('$');
+            const nonTerminals = symbols.filter(s => !isTerminalSLR(s));
+            
+            let html = '<table class="min-w-full border-collapse">';
+            html += '<thead><tr><th class="border p-2">状态</th>';
+            for (let t of terminals) html += `<th class="border p-2">${t}</th>`;
+            for (let nt of nonTerminals) html += `<th class="border p-2">${nt}</th>`;
+            html += '</tr></thead><tbody>';
+            
+            for (let set of itemSets) {
+                html += `<tr><td class="border p-2 font-bold">I${set.id}</td>`;
+                for (let t of terminals) {
+                    const act = action[set.id]?.[t];
+                    html += `<td class="border p-2">${act || ''}</td>`;
+                }
+                for (let nt of nonTerminals) {
+                    const got = goto[set.id]?.[nt];
+                    html += `<td class="border p-2">${got !== undefined ? got : ''}</td>`;
+                }
+                html += '</tr>';
+            }
+            html += '</tbody></table>';
+            return html;
+        }
+
+        function renderSLRGraph(itemSets) {
+            const nodes = [], edges = [];
+            for (let set of itemSets) {
+                nodes.push({ id: set.id, label: `I${set.id}`, shape: 'circle', color: { background: '#e0e7ff', border: '#6366f1' } });
+                for (let [sym, targetId] of Object.entries(set.transitions)) edges.push({ from: set.id, to: targetId, label: sym, arrows: 'to', font: { size: 12 } });
+            }
+            const container = document.getElementById('slr-graph-container');
+            if (container) {
+                const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
+                const options = { nodes: { shape: 'circle', size: 35, font: { size: 14 }, borderWidth: 2 }, edges: { arrows: 'to', smooth: { type: 'curvedCW' }, font: { size: 12 } }, physics: { enabled: true } };
+                if (slrGraph) slrGraph.destroy();
+                slrGraph = new vis.Network(container, data, options);
+            }
+        }
+
+        function parseWithSLR(input, action, goto, productions, itemSets) {
+            const tokens = input.split(/\s+/);
+            tokens.push('$');
+            const stack = [0];
+            let pos = 0;
+            let steps = [];
+            steps.push('步骤\t状态栈\t符号栈\t输入\t动作');
+            
+            while (pos < tokens.length) {
+                const state = stack[stack.length - 1];
+                const symbol = tokens[pos];
+                const actionKey = action[state]?.[symbol];
+                
+                if (!actionKey) {
+                    steps.push(`错误\t${stack.join('')}\t-\t${tokens.slice(pos).join(' ')}\t无动作`);
+                    return { success: false, steps };
+                }
+                
+                if (actionKey === 'acc') {
+                    steps.push(`接受\t${stack.join('')}\t-\t${tokens.slice(pos).join(' ')}\t接受`);
+                    return { success: true, steps };
+                }
+                
+                if (actionKey[0] === 's') {
+                    const nextState = parseInt(actionKey.substring(1));
+                    stack.push(nextState);
+                    steps.push(`移进\t${stack.join('')}\t${symbol}\t${tokens.slice(pos + 1).join(' ')}\t${actionKey}`);
+                    pos++;
+                } else if (actionKey[0] === 'r') {
+                    const prodId = parseInt(actionKey.substring(1));
+                    const prod = productions[prodId];
+                    for (let i = 0; i < prod.right.length; i++) stack.pop();
+                    const topState = stack[stack.length - 1];
+                    const gotoState = goto[topState]?.[prod.left];
+                    if (gotoState !== undefined) stack.push(gotoState);
+                    steps.push(`归约\t${stack.join('')}\t${prod.left}\t${tokens.slice(pos).join(' ')}\t${actionKey} (${prod.left}->${prod.right.join(' ')})`);
+                } else {
+                    steps.push(`错误\t${stack.join('')}\t-\t${tokens.slice(pos).join(' ')}\t无效动作`);
+                    return { success: false, steps };
+                }
+            }
+            return { success: false, steps };
+        }
+
+        document.getElementById('slr-parse')?.addEventListener('click', function() {
+            const grammarInput = document.getElementById('slr-grammar-input').value;
+            let productions = parseGrammarSLR(grammarInput);
+            if (productions.length === 0) { alert('无法解析文法'); return; }
+            const startSymbol = productions[0].left;
+            const symbols = getSymbols(productions);
+            const { productions: newProds, itemSets } = buildSLRItems(productions, startSymbol);
+            const first = computeFirstSets(newProds, symbols);
+            const follow = computeFollowSets(newProds, startSymbol, first);
+            const { action, goto: gotoTable } = buildSLRTable(newProds, itemSets, first, follow);
+            
+            slrProductions = newProds;
+            slrItemSets = itemSets;
+            slrFirstSets = first;
+            slrFollowSets = follow;
+            slrActionTable = action;
+            slrGotoTable = gotoTable;
+            
+            document.getElementById('slr-productions-list').innerHTML = renderProductionsLR0(newProds);
+            document.getElementById('first-sets').innerHTML = renderFirstSets(first);
+            document.getElementById('follow-sets').innerHTML = renderFollowSets(follow);
+            document.getElementById('slr-table').innerHTML = renderSLRTable(action, gotoTable, itemSets, symbols);
+            renderSLRGraph(itemSets);
+            document.getElementById('slr-result-area').classList.remove('hidden');
+        });
+
+        document.getElementById('slr-parse-string')?.addEventListener('click', function() {
+            if (slrItemSets.length === 0) { alert('请先构建SLR分析表'); return; }
+            const inputStr = document.getElementById('slr-input-string').value;
+            const result = parseWithSLR(inputStr, slrActionTable, slrGotoTable, slrProductions, slrItemSets);
+            let html = '<div class="font-mono text-sm">';
+            for (let step of result.steps) html += `<div>${step.replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;')}</div>`;
+            html += '</div>';
+            if (result.success) html = '<div class="conflict-success">✅ 语法分析成功！</div>' + html;
+            else html = '<div class="conflict-warning">❌ 语法分析失败！</div>' + html;
+            document.getElementById('slr-parse-result').innerHTML = html;
+        });
+
+        document.getElementById('slr-upload')?.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    document.getElementById('slr-grammar-input').value = ev.target.result;
+                    document.getElementById('slr-parse').click();
+                };
+                reader.readAsText(e.target.files[0]);
+            }
+        });
+
+        // ==================== 实验五：语义分析 ====================
+        function semanticAnalysis(code) {
+            const lines = code.split('\n');
+            const symbols = [];
+            const ast = [];
+            let errors = [];
+            
+            for (let lineNum = 0; lineNum < lines.length; lineNum++) {
+                let line = lines[lineNum].trim();
+                if (line === '' || line.startsWith('//')) continue;
+                
+                // 变量声明: int x; 或 float y;
+                const declMatch = line.match(/^(int|float)\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*;$/);
+                if (declMatch) {
+                    const type = declMatch[1];
+                    const name = declMatch[2];
+                    if (symbols.some(s => s.name === name)) {
+                        errors.push(`第${lineNum + 1}行: 变量 ${name} 重复声明`);
+                    } else {
+                        symbols.push({ name, type, scope: 'global', initialized: false });
+                        ast.push({ type: 'VarDecl', name, dataType: type });
+                    }
+                    continue;
+                }
+                
+                // 赋值语句: x = 10;
+                const assignMatch = line.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*(.+);$/);
+                if (assignMatch) {
+                    const name = assignMatch[1];
+                    const expr = assignMatch[2];
+                    const symbol = symbols.find(s => s.name === name);
+                    if (!symbol) {
+                        errors.push(`第${lineNum + 1}行: 变量 ${name} 未声明`);
+                    } else {
+                        symbol.initialized = true;
+                        ast.push({ type: 'Assignment', name, expr, dataType: symbol.type });
+                    }
+                    continue;
+                }
+                
+                // if 语句
+                const ifMatch = line.match(/^if\s*\((.+)\)\s*{/);
+                if (ifMatch) {
+                    const condition = ifMatch[1];
+                    ast.push({ type: 'IfStmt', condition });
+                    continue;
+                }
+                
+                // while 语句
+                const whileMatch = line.match(/^while\s*\((.+)\)\s*{/);
+                if (whileMatch) {
+                    const condition = whileMatch[1];
+                    ast.push({ type: 'WhileStmt', condition });
+                    continue;
+                }
+                
+                // 表达式: z = x + y;
+                const exprMatch = line.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*([+\-*/])\s*([a-zA-Z_][a-zA-Z0-9_]*);$/);
+                if (exprMatch) {
+                    const name = exprMatch[1];
+                    const left = exprMatch[2];
+                    const op = exprMatch[3];
+                    const right = exprMatch[4];
+                    const symbol = symbols.find(s => s.name === name);
+                    const leftSym = symbols.find(s => s.name === left);
+                    const rightSym = symbols.find(s => s.name === right);
+                    if (!symbol) errors.push(`第${lineNum + 1}行: 变量 ${name} 未声明`);
+                    if (leftSym && !leftSym.initialized) errors.push(`第${lineNum + 1}行: 变量 ${left} 未初始化`);
+                    if (rightSym && !rightSym.initialized) errors.push(`第${lineNum + 1}行: 变量 ${right} 未初始化`);
+                    if (symbol) symbol.initialized = true;
+                    ast.push({ type: 'BinaryExpr', name, left, op, right });
+                    continue;
+                }
+            }
+            
+            return { symbols, ast, errors };
+        }
+        
+        function renderSymbolTable(symbols) {
+            let html = '<table class="min-w-full"><thead><tr><th class="text-left">变量名</th><th class="text-left">类型</th><th class="text-left">作用域</th><th class="text-left">已初始化</th></tr></thead><tbody>';
+            for (let sym of symbols) {
+                html += `<tr><td>${sym.name}</td><td>${sym.type}</td><td>${sym.scope}</td><td>${sym.initialized ? '是' : '否'}</td></tr>`;
+            }
+            html += '</tbody></table>';
+            return html;
+        }
+        
+        function renderAST(ast, indent = 0) {
+            let result = '';
+            const prefix = '  '.repeat(indent);
+            for (let node of ast) {
+                switch (node.type) {
+                    case 'VarDecl':
+                        result += `${prefix}├─ VarDecl: ${node.name} : ${node.dataType}\n`;
+                        break;
+                    case 'Assignment':
+                        result += `${prefix}├─ Assignment: ${node.name} = \n`;
+                        result += renderAST([node.expr ? { type: 'Expr', expr: node.expr } : null], indent + 1);
+                        break;
+                    case 'BinaryExpr':
+                        result += `${prefix}├─ BinaryExpr: ${node.left} ${node.op} ${node.right}\n`;
+                        break;
+                    case 'IfStmt':
+                        result += `${prefix}├─ IfStmt: condition = ${node.condition}\n`;
+                        break;
+                    case 'WhileStmt':
+                        result += `${prefix}├─ WhileStmt: condition = ${node.condition}\n`;
+                        break;
+                    default:
+                        if (node && node.expr) result += `${prefix}├─ Expr: ${node.expr}\n`;
+                }
+            }
+            return result || '(空)\n';
+        }
+        
+        document.getElementById('semantic-analyze')?.addEventListener('click', function() {
+            const code = document.getElementById('semantic-input').value;
+            const { symbols, ast, errors } = semanticAnalysis(code);
+            
+            document.getElementById('symbol-table').innerHTML = renderSymbolTable(symbols);
+            document.getElementById('ast-output').innerHTML = `<pre class="text-yellow-300">${renderAST(ast)}</pre>`;
+            
+            const resultDiv = document.getElementById('semantic-result');
+            if (errors.length === 0) {
+                resultDiv.innerHTML = '<div class="conflict-success">✅ 语义分析完成，无错误</div>';
+            } else {
+                resultDiv.innerHTML = `<div class="conflict-warning">❌ 发现 ${errors.length} 个错误:<br>${errors.join('<br>')}</div>`;
+            }
+            document.getElementById('semantic-result-area').classList.remove('hidden');
+        });
+        
+        document.getElementById('semantic-clear')?.addEventListener('click', function() {
+            document.getElementById('semantic-input').value = '';
+            document.getElementById('semantic-result-area').classList.add('hidden');
+        });
+        
+        document.getElementById('semantic-upload')?.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    document.getElementById('semantic-input').value = ev.target.result;
+                    document.getElementById('semantic-analyze').click();
+                };
+                reader.readAsText(e.target.files[0]);
+            }
+        });
+        
+        // ==================== 实验六：中间代码生成 ====================
+        let quadCounter = 0;
+        let tempCounter = 0;
+        
+        function generateIntermediateCode(code) {
+            const lines = code.split('\n');
+            const quads = [];
+            const tac = [];
+            let tempNum = 0;
+            
+            function newTemp() { return `t${tempNum++}`; }
+            
+            for (let line of lines) {
+                line = line.trim();
+                if (line === '' || line.startsWith('//')) continue;
+                
+                // 变量声明
+                const declMatch = line.match(/^(int|float)\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*;$/);
+                if (declMatch) {
+                    const name = declMatch[2];
+                    // 声明不产生代码
+                    continue;
+                }
+                
+                // 简单赋值: x = 10;
+                const simpleAssign = line.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*(\d+);$/);
+                if (simpleAssign) {
+                    const name = simpleAssign[1];
+                    const value = simpleAssign[2];
+                    quads.push({ op: '=', arg1: value, arg2: '', result: name });
+                    tac.push(`${name} = ${value}`);
+                    continue;
+                }
+                
+                // 表达式赋值: z = x + y;
+                const exprAssign = line.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*([+\-*/])\s*([a-zA-Z_][a-zA-Z0-9_]*);$/);
+                if (exprAssign) {
+                    const name = exprAssign[1];
+                    const left = exprAssign[2];
+                    const op = exprAssign[3];
+                    const right = exprAssign[4];
+                    const temp = newTemp();
+                    quads.push({ op: op, arg1: left, arg2: right, result: temp });
+                    quads.push({ op: '=', arg1: temp, arg2: '', result: name });
+                    tac.push(`${temp} = ${left} ${op} ${right}`);
+                    tac.push(`${name} = ${temp}`);
+                    continue;
+                }
+                
+                // 复合赋值: x = x + 10;
+                const compoundAssign = line.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*([+\-*/])\s*(\d+);$/);
+                if (compoundAssign) {
+                    const name = compoundAssign[1];
+                    const left = compoundAssign[2];
+                    const op = compoundAssign[3];
+                    const right = compoundAssign[4];
+                    const temp = newTemp();
+                    quads.push({ op: op, arg1: left, arg2: right, result: temp });
+                    quads.push({ op: '=', arg1: temp, arg2: '', result: name });
+                    tac.push(`${temp} = ${left} ${op} ${right}`);
+                    tac.push(`${name} = ${temp}`);
+                    continue;
+                }
+                
+                // if 语句
+                const ifMatch = line.match(/^if\s*\(([a-zA-Z_][a-zA-Z0-9_]*)\s*([<>]=?|==|!=)\s*(\d+)\)\s*{$/);
+                if (ifMatch) {
+                    const left = ifMatch[1];
+                    const op = ifMatch[2];
+                    const right = ifMatch[3];
+                    const labelElse = `L${quadCounter + 100}`;
+                    const labelEnd = `L${quadCounter + 200}`;
+                    quads.push({ op: `if ${left} ${op} ${right}`, arg1: '', arg2: '', result: `goto ${labelElse}` });
+                    quads.push({ op: 'label', arg1: '', arg2: '', result: '' });
+                    tac.push(`if ${left} ${op} ${right} goto ${labelElse}`);
+                    continue;
+                }
+                
+                // while 语句
+                const whileMatch = line.match(/^while\s*\(([a-zA-Z_][a-zA-Z0-9_]*)\s*([<>]=?|==|!=)\s*(\d+)\)\s*{$/);
+                if (whileMatch) {
+                    const left = whileMatch[1];
+                    const op = whileMatch[2];
+                    const right = whileMatch[3];
+                    const labelStart = `L${quadCounter + 100}`;
+                    const labelEnd = `L${quadCounter + 200}`;
+                    quads.push({ op: 'label', arg1: labelStart, arg2: '', result: '' });
+                    quads.push({ op: `if ${left} ${op} ${right}`, arg1: '', arg2: '', result: `goto ${labelEnd}` });
+                    tac.push(`if ${left} ${op} ${right} goto ${labelEnd}`);
+                    continue;
+                }
+                
+                // 右花括号
+                if (line === '}') {
+                    // 结束块
+                    continue;
+                }
+            }
+            
+            return { quads, tac };
+        }
+        
+        function renderQuadruples(quads) {
+            let html = '';
+            for (let i = 0; i < quads.length; i++) {
+                const q = quads[i];
+                if (q.op === 'label') {
+                    html += `<div class="quad-item text-yellow-300">${i+1}. ${q.arg1}:</div>`;
+                } else if (q.op.startsWith('if')) {
+                    html += `<div class="quad-item text-purple-300">${i+1}. (${q.op}, , , )</div>`;
+                } else {
+                    html += `<div class="quad-item">${i+1}. (${q.op}, ${q.arg1}, ${q.arg2}, ${q.result})</div>`;
+                }
+            }
+            return html;
+        }
+        
+        function renderTAC(tac) {
+            let html = '';
+            for (let line of tac) {
+                html += `<div class="quad-item">${line}</div>`;
+            }
+            return html;
+        }
+        
+        document.getElementById('icode-generate')?.addEventListener('click', function() {
+            const code = document.getElementById('icode-input').value;
+            const { quads, tac } = generateIntermediateCode(code);
+            
+            document.getElementById('quadruples-output').innerHTML = renderQuadruples(quads);
+            document.getElementById('tac-output').innerHTML = renderTAC(tac);
+            
+            const resultDiv = document.getElementById('icode-result');
+            if (quads.length > 0) {
+                resultDiv.innerHTML = `<div class="conflict-success">✅ 中间代码生成完成，共生成 ${quads.length} 条四元式，${tac.length} 条三地址码</div>`;
+            } else {
+                resultDiv.innerHTML = `<div class="conflict-warning">⚠️ 未生成中间代码</div>`;
+            }
+            document.getElementById('icode-result-area').classList.remove('hidden');
+        });
+        
+        document.getElementById('icode-clear')?.addEventListener('click', function() {
+            document.getElementById('icode-input').value = '';
+            document.getElementById('icode-result-area').classList.add('hidden');
+        });
+        
+        document.getElementById('icode-upload')?.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    document.getElementById('icode-input').value = ev.target.result;
+                    document.getElementById('icode-generate').click();
+                };
+                reader.readAsText(e.target.files[0]);
+            }
+        });
     </script>
 </body>
 </html>
