@@ -1,0 +1,16 @@
+SLR(1) Parse Table
+==================
+
+ACTION Table:
+I0: s4 s5 
+I1: s6 acc 
+I2: r1 s7 r1 r1 
+I3: r3 r3 r3 r3 
+I4: s4 s5 
+I5: r5 r5 r5 r5 
+I6: s4 s5 
+I7: s4 s5 
+I8: s6 s11 
+I9: r0 s7 r0 r0 
+I10: r2 r2 r2 r2 
+I11: r4 r4 r4 r4 
